@@ -1,0 +1,1 @@
+// This file can be empty or contain common functionality shared by all platforms
