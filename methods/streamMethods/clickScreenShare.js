@@ -78,6 +78,7 @@ export const clickScreenShare = async ({ parameters }) => {
         screenRequestState,
         screenRequestTime,
         audioOnlyRoom,
+        requestIntervalSeconds,
   
 
 

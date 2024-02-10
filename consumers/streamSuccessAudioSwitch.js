@@ -23,6 +23,7 @@ export const streamSuccessAudioSwitch = async ({ stream, parameters }) => {
         updateMainWindow,
         videoAlreadyOn,
         islevel,
+        member,
         lock_screen,
         shared,
         updateAudioProducer,

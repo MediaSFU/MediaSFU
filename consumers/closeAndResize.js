@@ -102,6 +102,7 @@ export async function closeAndResize({producerId, kind, parameters}) {
     
 
     //function to close and resize the video and audio elements
+    let participant
 
     if (kind === 'audio') {
       //stop the audio by removing the miniAudio with id = producerId
@@ -119,7 +120,7 @@ export async function closeAndResize({producerId, kind, parameters}) {
       } else {
 
         //get the name of the participant with the producerId
-        let participant = await participants.find(obj => obj.audioID === producerId);
+        participant = await participants.find(obj => obj.audioID === producerId);
 
         if (participant) {
 

@@ -97,6 +97,7 @@ export const clickAudio = async ({ parameters }) => {
         updateParticipants,
         updateTransportCreated,
         updateTransportCreatedAudio,
+        updateMicAction,
         mediaDevices,
 
         //mediasfu functions

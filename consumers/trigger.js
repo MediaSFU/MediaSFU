@@ -77,7 +77,6 @@ export async function trigger({ ref_ActiveNames, parameters }) {
             adminName = await admin[0].name;
         }
 
-        mainScreenPerson = await adminName
         personOnMainScreen = await adminName
         
         if (!ref_ActiveNames.includes(adminName)) {

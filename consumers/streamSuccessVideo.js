@@ -71,6 +71,7 @@ export const streamSuccessVideo = async ({ stream, parameters }) => {
       videoParamse,
       HostLabel,
       islevel,
+      member,
       updateMainWindow,
       lock_screen,
       shared,

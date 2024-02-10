@@ -107,16 +107,6 @@ export const createSendTransport = async ({ option, parameters }) => {
     });
   } catch (error) {
     // Handle errors during transport creation
-    try {
-      let { showAlert } = parameters;
-    } catch (error) {
-      if (showAlert) {
-        showAlert({
-          message: 'Error creating transport - ' + error.message,
-          type: 'danger',
-          duration: 3000,
-        });
-      }
-    }
-  }
+    console.log('Error creating send transport:', error);}
+  
 };

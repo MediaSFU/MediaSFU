@@ -65,6 +65,7 @@ export const confirmRecording = async({ parameters }) => {
     recordingSupportForOtherOrientation,
     recordingPreferredOrientation,
     recordingMultiFormatsSupport,
+    recordingAllParticipantsFullRoomSupport,
     recordingVideoOptimized,
     meetingVideoOptimized,
     eventType,

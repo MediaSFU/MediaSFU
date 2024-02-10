@@ -51,7 +51,8 @@ export async function addVideosGrid({ mainGridStreams, altGridStreams, numtoadd,
     updateMiniCardsGrid,
   } = parameters;
 
-
+  let name
+  
   windowWidth = componentSizes.width
   windowHeight = componentSizes.height
 

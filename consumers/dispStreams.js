@@ -51,6 +51,7 @@ export async function dispStreams({lStreams, ind, auto = false, ChatSkip = false
         chatRefStreams,
         eventType,
         islevel,
+        localStreamVideo,
         
         
 
@@ -340,6 +341,8 @@ export async function dispStreams({lStreams, ind, auto = false, ChatSkip = false
           })
 
           if (host) {
+
+            let streame
 
             remoteProducerId = await host.videoID;
             // get the stream from allvideostream with the same id as remoteProducerId

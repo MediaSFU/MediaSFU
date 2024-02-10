@@ -161,6 +161,8 @@ export async function switchUserVideoAlt({ videoPreference, checkoff, parameters
             videoDevicesFront = videoDevices.filter(device => device.label.includes('back') && device.kind === 'videoinput');
         }
 
+        let mediaConstraints = {};
+
         if (videoDevicesFront.length > 0) {
             videoDevicesFront.forEach((device) => {
                 if (device.kind === 'videoinput') {

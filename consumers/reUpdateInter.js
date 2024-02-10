@@ -63,7 +63,7 @@ export async function reUpdateInter({ name, add, force = false, average = 127, p
 
   }
 
-
+  let videoID
   if (shareScreenStarted || shared) {
 
     let newLimitedStreams_ = []
@@ -73,7 +73,7 @@ export async function reUpdateInter({ name, add, force = false, average = 127, p
 
       let participant = await participants.find(participant => participant.name == name)
 
-      let videoID = await participant.videoID;
+      videoID = await participant.videoID;
 
       if (videoID == null || videoID == "" || videoID == undefined) {
         return
