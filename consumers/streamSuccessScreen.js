@@ -35,8 +35,6 @@ export const streamSuccessScreen = async ({stream,parameters}) => {
     localStreamScreen = await stream
     await updateLocalStreamScreen(localStreamScreen)
 
-    console.log('screen share started',localStreamScreen)
-
     //create transport if not created else connect transport
     if (!transportCreated) {
       await createSendTransport({option:'screen',parameters:{...parameters,localStreamScreen}})
@@ -52,10 +50,14 @@ export const streamSuccessScreen = async ({stream,parameters}) => {
       await prepopulateUserMedia({name:HostLabel,parameters})
     } catch (error) {
     }
-
+    
+    //update the participants array to reflect the change
+    screenAlreadyOn = true;
+    await updateScreenAlreadyOn(screenAlreadyOn)
 
     //reorder streams if required
     try {
+      
 
       if (eventType == 'conference') {
         await reorderStreams({add:false,screenChanged:true,parameters})
@@ -79,9 +81,6 @@ export const streamSuccessScreen = async ({stream,parameters}) => {
       await stopShareScreen({parameters})
     }
 
-    //update the participants array to reflect the change
-    screenAlreadyOn = true;
-    updateScreenAlreadyOn(screenAlreadyOn)
 
     //if user requested to share screen, update the screenAction state
     if (screenAction == true) {
