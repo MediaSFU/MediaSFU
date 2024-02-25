@@ -48,6 +48,8 @@
  * @param {function} options.parameters.reorderStreams - Function to reorder streams.
  */
 
+import { MediaStream } from '../methods/utils/webrtc/webrtc'
+
 export const streamSuccessVideo = async ({ stream, parameters }) => {
 
   let {getUpdatedAllParams } = parameters;

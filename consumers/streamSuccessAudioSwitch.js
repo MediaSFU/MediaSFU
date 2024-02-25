@@ -5,6 +5,9 @@
  * @param {Object} parameters - The parameters object containing necessary variables.
  * @param {MediaStream} stream - The new MediaStream with the switched audio device.
  */
+
+import { MediaStream } from '../methods/utils/webrtc/webrtc'
+
 export const streamSuccessAudioSwitch = async ({ stream, parameters }) => {
     let {
         audioProducer,

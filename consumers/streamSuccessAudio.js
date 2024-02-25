@@ -41,6 +41,8 @@
  * @param {function} options.parameters.prepopulateUserMedia - Function to prepopulate user media information.
  */
 
+import { MediaStream } from '../methods/utils/webrtc/webrtc'
+
 export const streamSuccessAudio = async ({stream,parameters}) => {
 
     let {
