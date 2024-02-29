@@ -12,17 +12,12 @@ import { generateRandomWaitingRoomList } from './methods/utils/generateRandomWai
  * @returns {JSX.Element} The rendered React element.
  */
 function App() {
-
-  // The API username and API key for the Mediasfu account; needed for MediaSFU default PreJoinPage
-  const credentials = {apiUserName: "yourApiUserName", apiKey: "yourAPiKey"};
-
-
   // Whether to use seed data for generating random participants and messages
   const useSeed = true;
   let seedData = {};
   
   //inidcate the UI display type
-  let eventType  = 'broadcast' // 'broadcast', 'chat', 'webinar', 'conference'
+  let eventType  = 'chat' // 'broadcast', 'chat', 'webinar', 'conference'
 
 
   // If using seed data, generate random participants and messages
@@ -65,11 +60,8 @@ function App() {
 
   // Render the MediasfuBroadcast component with specified props
   return (
-    <MediasfuGeneric PrejoinPage={PreJoinPage} credentials={credentials} useLocalUIMode={useLocalUIMode} useSeed={useSeed} seedData={useSeed ? seedData : {}} />
+    <MediasfuGeneric PrejoinPage={PreJoinPage} useLocalUIMode={useLocalUIMode} useSeed={useSeed} seedData={useSeed ? seedData : {}} />
   );
 }
 
 export default App;
-
-
-

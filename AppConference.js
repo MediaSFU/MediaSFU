@@ -1,6 +1,5 @@
-import MediasfuGeneric from './components/mediasfuComponents/MediasfuGeneric';
-import PreJoinPage from './components/miscComponents/PreJoinPage';
 
+import MediasfuConference from './components/mediasfuComponents/MediasfuConference';
 import { generateRandomParticipants } from './methods/utils/generateRandomParticipants';
 import { generateRandomMessages } from './methods/utils/generateRandomMessages';
 import { generateRandomRequestList } from './methods/utils/generateRandomRequestList';
@@ -12,17 +11,9 @@ import { generateRandomWaitingRoomList } from './methods/utils/generateRandomWai
  * @returns {JSX.Element} The rendered React element.
  */
 function App() {
-
-  // The API username and API key for the Mediasfu account; needed for MediaSFU default PreJoinPage
-  const credentials = {apiUserName: "yourApiUserName", apiKey: "yourAPiKey"};
-
-
   // Whether to use seed data for generating random participants and messages
   const useSeed = true;
   let seedData = {};
-  
-  //inidcate the UI display type
-  let eventType  = 'broadcast' // 'broadcast', 'chat', 'webinar', 'conference'
 
 
   // If using seed data, generate random participants and messages
@@ -30,16 +21,16 @@ function App() {
     
     
     // Name of the member
-    const memberName = 'Prince';
+    const memberName = 'Alice';
     
     // Name of the host (same as member if the member is the host)
-    const hostName = 'Fred';
+    const hostName = 'Alice';
 
     // Generate random participants with Alice as member and Fred as host
-    const participants_ = generateRandomParticipants(memberName, "", hostName, eventType==="broadcast" || eventType==="chat" ? true : false);
+    const participants_ = generateRandomParticipants(memberName, "", hostName, false);
     
     // Generate random messages for the generated participants
-    const messages_ = generateRandomMessages(participants_, memberName, "", hostName, eventType==="broadcast" || eventType==="chat" ? true : false);
+    const messages_ = generateRandomMessages(participants_, memberName, "", hostName, false);
 
     // Generate random requests for the generated participants
     const requests_ = generateRandomRequestList(participants_, memberName, "", 3);
@@ -55,7 +46,6 @@ function App() {
       waitingList: waitingList_,
       member: memberName,
       host: hostName,
-      eventType: eventType
     };
   }
 
@@ -65,11 +55,8 @@ function App() {
 
   // Render the MediasfuBroadcast component with specified props
   return (
-    <MediasfuGeneric PrejoinPage={PreJoinPage} credentials={credentials} useLocalUIMode={useLocalUIMode} useSeed={useSeed} seedData={useSeed ? seedData : {}} />
+    <MediasfuConference useLocalUIMode={useLocalUIMode} useSeed={useSeed} seedData={useSeed ? seedData : {}} />
   );
 }
 
 export default App;
-
-
-

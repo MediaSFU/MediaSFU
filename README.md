@@ -39,6 +39,8 @@ To build your app for deployment, follow the Expo guide using the EAS client. Ch
 
 If you need assistance or have questions, you can refer to our [Developer Documentation](https://www.mediasfu.com/developers) or visit our [Community Forums](https://www.mediasfu.com/forums).
 
+For detailed documentation, refer to the [ReactJS SDK documentation](https://github.com/MediaSFU/MediaSFU-ReactJS).
+
 ## License
 
-This project is licensed under the [MIT License]
+This project is licensed under the [MIT License].
