@@ -220,7 +220,6 @@ export const initialValuesState = {
     startReport: false,
     endReport: false,
     recordTimerInterval: null,
-    recordStartTime: null,
     recordElapsedTime: 0,
     isTimerRunning: false,
     canPauseResume: false,

@@ -14,6 +14,10 @@
  * @param {string} options.parameters.recordingNameTagsColor - Color for name tags in recording display.
  * @param {string} options.parameters.recordingOrientationVideo - Video orientation for recording (e.g., 'portrait', 'landscape', 'all').
  * @param {boolean} options.parameters.recordingAddHLS - Whether to add HLS (HTTP Live Streaming) for recording.
+ * @param {boolean} options.parameters.recordingAddText - Whether to add text to the recording.
+ * @param {string} options.parameters.recordingCustomText - Custom text to add to the recording.
+ * @param {string} options.parameters.recordingCustomTextPosition - Position for custom text in the recording (e.g., 'top-left', 'top-right', 'bottom-left', 'bottom-right').
+ * @param {string} options.parameters.recordingCustomTextColor - Color for custom text in the recording.
  * @param {boolean} options.parameters.clearedToResume - State variable indicating if recording can be resumed.
  * @param {Function} options.parameters.updateClearedToRecord - Function to update the clearedToRecord state variable.
  * @param {string} options.parameters.meetingDisplayType - Display type for the meeting (e.g., 'all', 'video', 'media').
@@ -56,6 +60,10 @@ export const confirmRecording = async({ parameters }) => {
     recordingNameTagsColor,
     recordingOrientationVideo,
     recordingAddHLS,
+    recordingAddText,
+    recordingCustomText,
+    recordingCustomTextPosition,
+    recordingCustomTextColor,
     clearedToResume,
     updateClearedToRecord,
     meetingDisplayType,
@@ -65,8 +73,8 @@ export const confirmRecording = async({ parameters }) => {
     recordingSupportForOtherOrientation,
     recordingPreferredOrientation,
     recordingMultiFormatsSupport,
-    recordingAllParticipantsFullRoomSupport,
     recordingVideoOptimized,
+    recordingAllParticipantsFullRoomSupport,
     meetingVideoOptimized,
     eventType,
     updateRecordingDisplayType,
@@ -258,9 +266,16 @@ export const confirmRecording = async({ parameters }) => {
     orientationVideo: recordingOrientationVideo,
   };
 
+  const textSpecs = {
+    addText: recordingAddText,
+    customText: recordingCustomText,
+    customTextPosition: recordingCustomTextPosition,
+    customTextColor: recordingCustomTextColor,
+  };
+
 
   // Construct userRecordingParams object
-  const userRecordingParams = { mainSpecs, dispSpecs };
+  const userRecordingParams = { mainSpecs, dispSpecs, textSpecs };
 
   // Update state variables based on the logic
   updateUserRecordingParams(userRecordingParams);
@@ -273,6 +288,7 @@ export const confirmRecording = async({ parameters }) => {
   updateRecordingSupportForOtherOrientation(recordingSupportForOtherOrientation);
   updateRecordingPreferredOrientation(recordingPreferredOrientation);
   updateRecordingMultiFormatsSupport(recordingMultiFormatsSupport);
+  
 
 
 };

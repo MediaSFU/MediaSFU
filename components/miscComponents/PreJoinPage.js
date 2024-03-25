@@ -1,21 +1,62 @@
-import React, { useState } from 'react';
+/**
+ * PreJoinPage Component
+ * 
+ * The PreJoinPage component provides a user interface for users to either create or join a room for a media session. It allows users to input their display name, specify the duration, event type, and room capacity. Users can either create a new room or join an existing room.
+ * 
+ * Props:
+ *   - parameters: An object containing parameters such as showAlert, updateIsLoadingModalVisible, onWeb, connectSocket, socket, updateSocket, updateValidated, updateApiUserName, updateApiToken, updateLink, updateRoomName, updateMember, and validated.
+ *   - credentials: An object containing the API username and API key for the user's account.
+ * State:
+ *   The component manages the following state variables:
+ *   - isCreateMode: A boolean indicating whether the component is in create mode (true) or join mode (false).
+ *   - name: The display name entered by the user.
+ *   - duration: The duration of the event in minutes entered by the user.
+ *   - eventType: The type of event selected by the user (broadcast, chat, webinar, conference).
+ *   - capacity: The room capacity entered by the user.
+ *   - eventID: The event ID entered by the user.
+ *   - mediasfuURL: The URL of the media server.
+ *   - error: Any error message to be displayed to the user.
+ * 
+ * Methods:
+ *   The component defines the following methods:
+ *   - handleToggleMode(): Toggles between create mode and join mode.
+ *   - handleCreateRoom(): Handles the creation of a new room based on user input.
+ *   - handleJoinRoom(): Handles joining an existing room based on user input.
+ *   - checkLimitsAndMakeRequest(): Checks API request limits and makes a request to connect to the room.
+ *   - useEffect(): Manages screen orientation lock and unlock based on component lifecycle.
+ * 
+ * Styles:
+ *   The component uses the following styles:
+ *   - container: Styles for the main container.
+ *   - inputContainer: Styles for the input container.
+ *   - inputField: Styles for text input fields.
+ *   - actionButton: Styles for action buttons.
+ *   - toggleContainer: Styles for the toggle mode container.
+ *   - toggleButton: Styles for the toggle mode button.
+ *   - error: Styles for error messages.
+ *   - logoContainer: Styles for the logo container.
+ *   - logoImage: Styles for the logo image.
+ *   - orContainer: Styles for the "OR" text container.
+ *   - orText: Styles for the "OR" text.
+ */
+
+
+import React, { useState, useEffect } from 'react';
 import { View, Text, TextInput, Pressable, Image } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Orientation from 'react-native-orientation-locker';
 
-const MAX_ATTEMPTS = 6;
-const RATE_LIMIT_DURATION = 3000000;
+const MAX_ATTEMPTS = 10; // Maximum number of unsuccessful attempts before rate limiting
+const RATE_LIMIT_DURATION = 3 * 60 * 60 * 1000; // 3 hours in milliseconds
 const apiKey = 'yourAPIKEY'
 const apiUserName = 'yourAPIUSERNAME'
-
-
+const user_credentials = { apiUserName, apiKey };
 
 
 async function joinRoomOnMediaSFU(payload, apiUserName, apiKey) {
     try {
 
         const response = await fetch('https://mediasfu.com/v1/rooms/', {
-
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -62,7 +103,7 @@ async function createRoomOnMediaSFU(payload, apiUserName, apiKey) {
     }
 }
 
-const PreJoinPage = ({ parameters }) => {
+const PreJoinPage = ({ parameters, credentials = user_credentials }) => {
 
     const [isCreateMode, setIsCreateMode] = useState(false);
     const [name, setName] = useState('');
@@ -70,7 +111,6 @@ const PreJoinPage = ({ parameters }) => {
     const [eventType, setEventType] = useState('');
     const [capacity, setCapacity] = useState('');
     const [eventID, setEventID] = useState('');
-    const [mediasfuURL, setMediasfuURL] = useState('');
     const [error, setError] = useState('');
 
     let { showAlert, updateIsLoadingModalVisible, onWeb, connectSocket, socket, updateSocket, updateValidated,
@@ -110,6 +150,7 @@ const PreJoinPage = ({ parameters }) => {
             );
 
             const socket = await Promise.race([socketPromise, timeoutPromise]);
+
 
             if (socket && socket.id) {
                 unsuccessfulAttempts = 0;
@@ -181,18 +222,25 @@ const PreJoinPage = ({ parameters }) => {
                 return;
             }
 
+
+            //must be one of 'broadcast', 'chat', 'webinar', 'conference'
+            if (eventType.toLowerCase() !== 'broadcast' && eventType.toLowerCase() !== 'chat' && eventType.toLowerCase() !== 'webinar' && eventType.toLowerCase() !== 'conference') {
+                setError('Event type must be one of "broadcast", "chat", "webinar", or "conference".');
+                return;
+            }
+
             // Call API to create room
             const payload = {
                 action: 'create',
                 duration: parseInt(duration),
                 capacity: parseInt(capacity),
-                eventType,
+                eventType: eventType.toLowerCase(),
                 userName: name
             };
 
             updateIsLoadingModalVisible(true);
 
-            const response = await createRoomOnMediaSFU(payload, apiUserName, apiKey);
+            const response = await createRoomOnMediaSFU(payload, credentials?.apiUserName, credentials?.apiKey);
 
             if (response.success) {
                 // Handle successful room creation
@@ -251,7 +299,7 @@ const PreJoinPage = ({ parameters }) => {
 
             updateIsLoadingModalVisible(true);
 
-            const response = await joinRoomOnMediaSFU(payload, apiUserName, apiKey);
+            const response = await joinRoomOnMediaSFU(payload, credentials?.apiUserName, credentials?.apiKey);;
 
             if (response.success) {
                 // Handle successful room join
@@ -291,6 +339,20 @@ const PreJoinPage = ({ parameters }) => {
 
     };
 
+    useEffect(() => {
+        // Lock the orientation to portrait mode when the component mounts
+        if (!validated) {
+            Orientation.lockToPortrait();
+        } else {
+            Orientation.unlockAllOrientations();
+        }
+
+        // Clean up and unlock the orientation when the component unmounts
+        return () => {
+            Orientation.unlockAllOrientations();
+        };
+    }, [validated]);
+
     return (
         <View style={styles.container}>
             <View style={styles.logoContainer}>
@@ -301,19 +363,25 @@ const PreJoinPage = ({ parameters }) => {
                     <>
                         <TextInput
                             placeholder="Display Name"
-                            value={name}
+                            value={name ? name : ''}
                             onChangeText={setName}
                             style={styles.inputField}
                         />
                         <TextInput
                             placeholder="Duration (minutes)"
-                            value={duration}
+                            value={duration ? duration : ''}
                             onChangeText={setDuration}
                             style={styles.inputField}
                         />
                         <TextInput
+                            placeholder="Event Type"
+                            value={eventType ? eventType : ''}
+                            onChangeText={setEventType}
+                            style={styles.inputField}
+                        />
+                        <TextInput
                             placeholder="Room Capacity"
-                            value={capacity}
+                            value={capacity ? capacity : ''}
                             onChangeText={setCapacity}
                             style={styles.inputField}
                         />
@@ -325,16 +393,17 @@ const PreJoinPage = ({ parameters }) => {
                     <>
                         <TextInput
                             placeholder="Display Name"
-                            value={name}
+                            value={name ? name : ''}
                             onChangeText={setName}
                             style={styles.inputField}
                         />
                         <TextInput
                             placeholder="Event ID"
-                            value={eventID}
+                            value={eventID ? eventID : ''}
                             onChangeText={setEventID}
                             style={styles.inputField}
                         />
+
                         <Pressable onPress={handleJoinRoom} style={styles.actionButton}>
                             <Text style={{ color: 'white' }}>Join Room</Text>
                         </Pressable>
@@ -370,20 +439,22 @@ const styles = {
         justifyContent: 'center',
     },
     inputField: {
-        height: 30,
+        height: 40,
         width: '100%',
-        borderColor: 'gray',
+        minWidth: 300,
+        borderColor: 'black',
         borderWidth: 1,
         marginBottom: 10,
         paddingHorizontal: 5,
         borderRadius: 5,
+        backgroundColor: 'white',
     },
     actionButton: {
         backgroundColor: 'black',
-        paddingVertical: 5,
+        paddingVertical: 10,
         paddingHorizontal: 20,
         borderRadius: 5,
-        marginBottom: 10,
+        marginVertical: 10,
     },
     toggleContainer: {
         alignItems: 'center',
@@ -391,7 +462,7 @@ const styles = {
     },
     toggleButton: {
         backgroundColor: 'black',
-        paddingVertical: 5,
+        paddingVertical: 10,
         paddingHorizontal: 20,
         borderRadius: 5,
     },
@@ -419,5 +490,4 @@ const styles = {
         fontWeight: 'bold',
     },
 };
-
 export default PreJoinPage;

@@ -22,6 +22,10 @@
  * @param {string} params.recordingBackgroundColor - Background color for recording.
  * @param {string} params.recordingNameTagsColor - Name tags color for recording.
  * @param {string} params.recordingOrientationVideo - Video orientation for recording.
+ * @param {string} params.recordingAddText - Indicates if text should be added during recording.
+ * @param {string} params.recordingCustomText - Custom text for recording.
+ * @param {string} params.recordingCustomTextPosition - Custom text position for recording.
+ * @param {string} params.recordingCustomTextColor - Custom text color for recording.
  * @param {number} params.pauseRecordCount - Count of pauses during recording.
  * @param {number} params.recordElapsedTime - Elapsed time during recording.
  * @param {boolean} params.recordStarted - Indicates if recording has started.
@@ -47,6 +51,10 @@
  * @param {function} params.updateRecordingBackgroundColor - Function to update recording background color.
  * @param {function} params.updateRecordingNameTagsColor - Function to update recording name tags color.
  * @param {function} params.updateRecordingOrientationVideo - Function to update recording video orientation.
+ * @param {function} params.updateRecordingAddText - Function to update recording text status.
+ * @param {function} params.updateRecordingCustomText - Function to update recording custom text.
+ * @param {function} params.updateRecordingCustomTextPosition - Function to update recording custom text position.
+ * @param {function} params.updateRecordingCustomTextColor - Function to update recording custom text color.
  * @param {function} params.updatePauseRecordCount - Function to update pause record count.
  * @param {function} params.updateRecordElapsedTime - Function to update recorded elapsed time.
  * @param {function} params.updateRecordStarted - Function to update recording started status.
@@ -79,6 +87,10 @@ export const RecordingNotice = async ({ state, userRecordingParam, pauseCount, t
       recordingBackgroundColor,
       recordingNameTagsColor,
       recordingOrientationVideo,
+      recordingAddText,
+      recordingCustomText,
+      recordingCustomTextPosition,
+      recordingCustomTextColor,
       pauseRecordCount,
       recordElapsedTime,
       recordStarted,
@@ -106,6 +118,10 @@ export const RecordingNotice = async ({ state, userRecordingParam, pauseCount, t
       updateRecordingBackgroundColor,
       updateRecordingNameTagsColor,
       updateRecordingOrientationVideo,
+      updateRecordingAddText,
+      updateRecordingCustomText,
+      updateRecordingCustomTextPosition,
+      updateRecordingCustomTextColor,
       updatePauseRecordCount,
       updateRecordElapsedTime,
       updateRecordStarted,
@@ -159,6 +175,10 @@ export const RecordingNotice = async ({ state, userRecordingParam, pauseCount, t
                   recordingBackgroundColor = userRecordingParams.dispSpecs.backgroundColor;
                   recordingNameTagsColor = userRecordingParams.dispSpecs.nameTagsColor;
                   recordingOrientationVideo = userRecordingParams.dispSpecs.orientationVideo;
+                  recordingAddText = userRecordingParams.textSpecs.addText
+                  recordingCustomText = userRecordingParams.textSpecs.customText
+                  recordingCustomTextPosition = userRecordingParams.textSpecs.customTextPosition
+                  recordingCustomTextColor = userRecordingParams.textSpecs.customTextColor
 
                   // Update user recording parameters
                   updateUserRecordingParams(userRecordingParams);
@@ -173,6 +193,10 @@ export const RecordingNotice = async ({ state, userRecordingParam, pauseCount, t
                   updateRecordingBackgroundColor(recordingBackgroundColor);
                   updateRecordingNameTagsColor(recordingNameTagsColor);
                   updateRecordingOrientationVideo(recordingOrientationVideo);
+                  updateRecordingAddText(recordingAddText);
+                  updateRecordingCustomText(recordingCustomText);
+                  updateRecordingCustomTextPosition(recordingCustomTextPosition);
+                  updateRecordingCustomTextColor(recordingCustomTextColor);
 
                   // Update pause record count
                   pauseRecordCount = pauseCount;
