@@ -18,7 +18,7 @@ function App() {
 
 
   // Whether to use seed data for generating random participants and messages
-  const useSeed = true;
+  const useSeed = false;
   let seedData = {};
   
   //inidcate the UI display type

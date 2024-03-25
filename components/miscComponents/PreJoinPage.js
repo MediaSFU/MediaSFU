@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import { View, Text, TextInput, Pressable, Image } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import Orientation from 'react-native-orientation-locker';
 
-const cookies = new Cookies();
 const MAX_ATTEMPTS = 6;
 const RATE_LIMIT_DURATION = 3000000;
 const apiKey = 'yourAPIKEY'
