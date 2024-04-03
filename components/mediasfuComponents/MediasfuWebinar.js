@@ -3717,6 +3717,7 @@ function MediasfuWebinar({ PrejoinPage=WelcomePage, credentials={credentials}, u
                 waitingRoomList={filteredWaitingRoomList.current}
                 updateWaitingList={updateWaitingRoomList}
                 roomName={roomName.current}
+                socket={socket.current}
                 parameters={
                     {
                         updateWaitingRoomCounter: updateWaitingRoomCounter,

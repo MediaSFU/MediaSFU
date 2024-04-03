@@ -3717,6 +3717,7 @@ function MediasfuConference({PrejoinPage=WelcomePage, credentials={credentials},
                 waitingRoomList={filteredWaitingRoomList.current}
                 updateWaitingList={updateWaitingRoomList}
                 roomName={roomName.current}
+                socket={socket.current}
                 parameters={
                     {
                         updateWaitingRoomCounter: updateWaitingRoomCounter,

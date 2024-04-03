@@ -35,6 +35,7 @@ const WaitingRoomModal = ({
   waitingRoomList,
   updateWaitingList,
   roomName,
+  socket,
   onWaitingRoomItemPress = respondToWaiting,
   position = 'topRight',
   backgroundColor = '#83c0e9', 
@@ -76,7 +77,7 @@ const WaitingRoomModal = ({
                     </View>
                     <View style={styles.col2}>
                       <Pressable onPress={() => 
-                        respondToWaiting({parameters:{
+                        onWaitingRoomItemPress({parameters:{
                           participantId:participant.id,
                           participantName:participant.name,
                           waiting:participant,
@@ -84,6 +85,7 @@ const WaitingRoomModal = ({
                           waitingList:waitingRoomList,
                           roomName,
                           type:true, //accepted
+                          socket:socket,
                         }})
                         }
                         >
@@ -92,7 +94,7 @@ const WaitingRoomModal = ({
                     </View>
                     <View style={styles.col2}>
                     <Pressable onPress={() => 
-                        respondToWaiting({parameters:{
+                        onWaitingRoomItemPress({parameters:{
                           participantId:participant.id,
                           participantName:participant.name,
                           waiting:participant,
@@ -100,6 +102,7 @@ const WaitingRoomModal = ({
                           waitingList:waitingRoomList,
                           roomName,
                           type:false, //rejected
+                          socket:socket,
                         }})
                         }
                         >
