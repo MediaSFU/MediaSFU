@@ -33,7 +33,7 @@ function App() {
     const memberName = 'Prince';
     
     // Name of the host (same as member if the member is the host)
-    const hostName = 'Fred';
+    const hostName = 'Prince';
 
     // Generate random participants with Alice as member and Fred as host
     const participants_ = generateRandomParticipants(memberName, "", hostName, eventType==="broadcast" || eventType==="chat" ? true : false);

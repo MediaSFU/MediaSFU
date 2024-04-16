@@ -52,7 +52,7 @@ import { MediaStream } from '../methods/utils/webrtc/webrtc'
 
 export const streamSuccessVideo = async ({ stream, parameters }) => {
 
-  let {getUpdatedAllParams } = parameters;
+  let { getUpdatedAllParams } = parameters;
   parameters = await getUpdatedAllParams()
 
   try {
@@ -84,6 +84,7 @@ export const streamSuccessVideo = async ({ stream, parameters }) => {
       currentFacingMode,
       device,
       rtpCapabilities,
+
 
 
       //update functions
@@ -144,58 +145,72 @@ export const streamSuccessVideo = async ({ stream, parameters }) => {
     if (userDefaultVideoInputDevice) {
       updateUserDefaultVideoInputDevice(userDefaultVideoInputDevice)
     }
-    if (currentFacingMode){
+    if (currentFacingMode) {
       updateCurrentFacingMode(currentFacingMode)
     }
 
     allowed = true
     updateAllowed(allowed)
 
-    //apply the video constraints
-    if (islevel == '2') {
-      if (!shared || !shareScreenStarted) {
-        params = await hParams;
-        videoParamse = await { params }
+    try {
+      //apply the video constraints
+      if (islevel == '2') {
+        if (!shared || !shareScreenStarted) {
+          params = await hParams;
+          videoParamse = await { params }
+        } else {
+          params = await vParams;
+          videoParamse = await { params }
+        }
       } else {
         params = await vParams;
         videoParamse = await { params }
       }
-    } else {
-      params = await vParams;
-      videoParamse = await { params }
-    }
 
 
 
-    //remove vp9 codec from the video codecs; support only vp8 and h264
-    let codecs = device.rtpCapabilities.codecs.filter((codec) => codec.mimeType.toLowerCase() !== 'video/vp9');
+      //remove vp9 codec from the video codecs; support only vp8 and h264
+      let codecs = device.rtpCapabilities.codecs.filter((codec) => codec.mimeType.toLowerCase() !== 'video/vp9');
 
-    //create transport if not created else connect transport
-    videoParams = await { track: localStream.getVideoTracks()[0], ...videoParamse, codecs };
-    await updateVideoParams(videoParams)
+      //create transport if not created else connect transport
+      videoParams = await { track: localStream.getVideoTracks()[0], ...videoParamse, codecs };
+      await updateVideoParams(videoParams)
 
 
-    if (!transportCreated) {
+      if (!transportCreated) {
 
-      try {
-        await createSendTransport({
-          parameters: {
-            ...parameters,
-            videoParams: videoParams
-          },
-          option: 'video'
+        try {
+          await createSendTransport({
+            parameters: {
+              ...parameters,
+              videoParams: videoParams
+            },
+            option: 'video'
+          });
+        } catch (error) {
+
+        }
+
+      } else {
+        await connectSendTransportVideo({
+          parameters: parameters,
+          videoParams: videoParams
         });
-      } catch (error) {
 
       }
 
-    } else {
-      await connectSendTransportVideo({
-        parameters: parameters,
-        videoParams: videoParams
-      });
+    } catch (error) {
+
+      if (showAlert) {
+        showAlert({
+          message: error.message,
+          type: 'danger',
+          duration: 3000
+        })
+      }
 
     }
+
 
 
     //update the videoAlreadyOn state

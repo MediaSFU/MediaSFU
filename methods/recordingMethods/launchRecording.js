@@ -15,6 +15,7 @@
  * @param {boolean} options.parameters.recordStarted - State variable indicating whether recording has started.
  * @param {boolean} options.parameters.recordPaused - State variable indicating whether recording has paused.
  * @param {boolean} options.parameters.recordStopped - State variable indicating whether recording has stopped.
+ * @param {boolean} options.parameters.localUIMode - State variable indicating whether the user is in local UI development mode.  
  * @returns {void}
  */
 export const launchRecording = ({ parameters }) => {
@@ -32,10 +33,11 @@ export const launchRecording = ({ parameters }) => {
     recordStarted,
     recordPaused,
     recordStopped,
+    localUIMode,
   } = parameters;
 
   // Check if recording is already launched
-  if (!isRecordingModalVisible && stopLaunchRecord) {
+  if ((!isRecordingModalVisible && stopLaunchRecord)  && !localUIMode ) {
     if (showAlert) {
       showAlert({
         message: 'Recording has already ended or you are not allowed to record',
@@ -46,8 +48,8 @@ export const launchRecording = ({ parameters }) => {
     return;
   }
 
-  // Check if recording initiation is allowed
-  if (!isRecordingModalVisible && canLaunchRecord) {
+ // Check if recording initiation is allowed
+  if ((!isRecordingModalVisible && canLaunchRecord) && !localUIMode) {
     // Check if both audio and video recording are not allowed
     if (!recordingAudioSupport && !recordingVideoSupport) {
       if (showAlert) {
@@ -79,7 +81,7 @@ export const launchRecording = ({ parameters }) => {
     }
   }
 
-  if (!isRecordingModalVisible && !recordingAudioSupport && !recordingVideoSupport) {
+  if ((!isRecordingModalVisible && !recordingAudioSupport && !recordingVideoSupport) && !localUIMode) {
     if (showAlert) {
       showAlert({
         message: 'You are not allowed to record',

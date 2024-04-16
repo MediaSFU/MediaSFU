@@ -13,12 +13,19 @@ export async function requestScreenShare({ parameters }) {
     // Destructure parameters
     let { 
       
-      socket,
+       socket,
        showAlert,
+       localUIMode,
 
        //mediasfu functions
         startShareScreen
        } = parameters;
+
+    // Check if the user is in local UI mode
+    if (localUIMode === true) {
+      await startShareScreen({ parameters });
+      return;
+    }
 
     await socket.emit('requestScreenShare', async ({ allowScreenShare }) => {
       if (!allowScreenShare) {
