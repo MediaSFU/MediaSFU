@@ -38,40 +38,40 @@ export async function processConsumerTransports({ consumerTransports, lStreams_,
       );
     }
 
-    // Get paused consumer transports that are audio
-    const consumerTransportsToResumeAudio = consumerTransports.filter(
-      (transport) =>
-        isValidProducerId(transport.producerId, lStreams_, remoteScreenStream, oldAllStreams, newLimitedStreams) &&
-        transport.consumer?.paused === true &&
-        transport.consumer.kind === "audio"
-    );
+    // // Get paused consumer transports that are audio
+    // const consumerTransportsToResumeAudio = consumerTransports.filter(
+    //   (transport) =>
+    //     isValidProducerId(transport.producerId, lStreams_, remoteScreenStream, oldAllStreams, newLimitedStreams) &&
+    //     transport.consumer?.paused === true &&
+    //     transport.consumer.kind === "audio"
+    // );
 
-    // Get unpaused consumer transports that are audio
-    const consumerTransportsToPauseAudio = consumerTransports.filter(
-      (transport) =>
-        transport.producerId &&
-        transport.producerId !== null &&
-        transport.producerId !== "" &&
-        !lStreams_.some((stream) => stream.producerId === transport.producerId) &&
-        transport.consumer &&
-        transport.consumer.kind &&
-        transport.consumer.paused !== true &&
-        transport.consumer.kind === "audio" &&
-        !remoteScreenStream.some((stream) => stream.producerId === transport.producerId) &&
-        !oldAllStreams.some((stream) => stream.producerId === transport.producerId) &&
-        !newLimitedStreams.some((stream) => stream.producerId === transport.producerId)
-    );
+    // // Get unpaused consumer transports that are audio
+    // const consumerTransportsToPauseAudio = consumerTransports.filter(
+    //   (transport) =>
+    //     transport.producerId &&
+    //     transport.producerId !== null &&
+    //     transport.producerId !== "" &&
+    //     !lStreams_.some((stream) => stream.producerId === transport.producerId) &&
+    //     transport.consumer &&
+    //     transport.consumer.kind &&
+    //     transport.consumer.paused !== true &&
+    //     transport.consumer.kind === "audio" &&
+    //     !remoteScreenStream.some((stream) => stream.producerId === transport.producerId) &&
+    //     !oldAllStreams.some((stream) => stream.producerId === transport.producerId) &&
+    //     !newLimitedStreams.some((stream) => stream.producerId === transport.producerId)
+    // );
 
-    // Pause consumer transports after a short delay
-    await sleep(100);
+    // // Pause consumer transports after a short delay
+    // await sleep(100);
 
-    // Emit consumer.pause() for each filtered transport (audio)
-    for (const transport of consumerTransportsToPauseAudio) {
-      await transport.consumer.pause();
-      await transport.socket_.emit("consumer-pause", { serverConsumerId: transport.serverConsumerTransportId }, async ({ paused }) => {
-        // Handle the response if needed
-      });
-    }
+    // // Emit consumer.pause() for each filtered transport (audio)
+    // for (const transport of consumerTransportsToPauseAudio) {
+    //   await transport.consumer.pause();
+    //   await transport.socket_.emit("consumer-pause", { serverConsumerId: transport.serverConsumerTransportId }, async ({ paused }) => {
+    //     // Handle the response if needed
+    //   });
+    // }
 
     // Get paused consumer transports that are not audio
     const consumerTransportsToResume = consumerTransports.filter(
