@@ -117,6 +117,14 @@ export async function reUpdateInter({ name, add, force = false, average = 127, p
 
     } else {
 
+      let participant = await participants.find(participant => participant.name == name)
+
+      videoID = await participant.videoID;
+
+      if (videoID == null || videoID == "" || videoID == undefined) {
+        return
+      }
+
       if (!force) {
 
         try {
@@ -132,8 +140,9 @@ export async function reUpdateInter({ name, add, force = false, average = 127, p
 
       } else {
         //check if the persons.muted == false
-        let participant = await participants.find(participant => participant.name == name)
         let mic = await participant.muted;
+      
+
         if (mic) {
 
           try {
