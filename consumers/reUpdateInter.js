@@ -13,12 +13,12 @@ export async function reUpdateInter({ name, add, force = false, average = 127, p
   // function to periodically update the ui for active media streams
 
   let {
-    screenPageLimit, itemPageLimit, reorderInterval, fastReOrderInterval, eventType,
+    screenPageLimit, itemPageLimit, reOrderInterval, fastReOrderInterval, eventType,
     participants, allVideoStreams, shared, shareScreenStarted, adminNameStream, screenShareNameStream,
     updateMainWindow,
     sortAudioLoudness,
-    lastReorderTime, newLimitedStreams, newLimitedStreamsIDs, oldSoundIds,
-    updateUpdateMainWindow, updateSortAudioLoudness, updateLastReorderTime,
+    lastReOrderTime, newLimitedStreams, newLimitedStreamsIDs, oldSoundIds,
+    updateUpdateMainWindow, updateSortAudioLoudness, updateLastReOrderTime,
     updateNewLimitedStreams, updateNewLimitedStreamsIDs, updateOldSoundIds,
 
     //mediasfu functions
@@ -41,8 +41,8 @@ export async function reUpdateInter({ name, add, force = false, average = 127, p
 
     if (add) {
       const currentTime = Date.now();
-      if (((currentTime - lastReorderTime >= reorderInterval) && (average > 128.5)) || (average > 130 && currentTime - lastReorderTime >= fastReOrderInterval)) {
-        lastReorderTime = currentTime;
+      if (((currentTime - lastReOrderTime >= reOrderInterval) && (average > 128.5)) || (average > 130 && currentTime - lastReOrderTime >= fastReOrderInterval)) {
+        lastReOrderTime = currentTime;
         sortAudioLoudness = true;
         // updateMainWindow = true;
         if (eventType == 'conference') {
@@ -54,7 +54,7 @@ export async function reUpdateInter({ name, add, force = false, average = 127, p
 
         updateSortAudioLoudness(sortAudioLoudness);
         updateUpdateMainWindow(updateMainWindow);
-        updateLastReorderTime(lastReorderTime);
+        updateLastReOrderTime(lastReOrderTime);
 
         return
       }
