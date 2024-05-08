@@ -211,7 +211,8 @@ function MediasfuBroadcast({ PrejoinPage=WelcomePage, credentials={}, useLocalUI
             // throw new Error('Failed to join the room. Please check your connection and try again.');
         }
     };
-
+    
+    registerGlobals(); // Register globals for WebRTC
 
     //Room Details
     const roomName = useRef(""); // Room name

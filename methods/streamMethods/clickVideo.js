@@ -31,7 +31,7 @@
  * @param {object} options.parameters.videoSetting - Participant's video setting.
  * @param {object} options.parameters.screenshareSetting - Participant's screenshare setting.
  * @param {object} options.parameters.chatSetting - Participant's chat setting.
- * @param {number} options.parameters.requestIntervalSeconds - Interval between video permission requests.
+ * @param {number} options.parameters.updateRequestIntervalSeconds - Interval between video permission requests.
  * @param {function} options.parameters.streamSuccessVideo - Function to handle successful video stream acquisition.
  * @param {function} options.parameters.showAlert - Function to display alerts.
  * @param {function} options.parameters.updateVideoAlreadyOn - Function to update the videoAlreadyOn status.
@@ -76,7 +76,7 @@ export const clickVideo = async ({ parameters }) => {
     videoSetting,
     screenshareSetting,
     chatSetting,
-    requestIntervalSeconds,
+    updateRequestIntervalSeconds,
 
 
     streamSuccessVideo,
@@ -172,11 +172,11 @@ export const clickVideo = async ({ parameters }) => {
         return;
       }
       // check if rejected and current time is less than videoRequestTime 
-      if (videoRequestState === 'rejected' && (Date.now() - videoRequestTime) < requestIntervalSeconds) {
+      if (videoRequestState === 'rejected' && (Date.now() - videoRequestTime) < updateRequestIntervalSeconds) {
 
         if (showAlert) {
           showAlert({
-            message: 'A request was rejected. Please wait for ' + requestIntervalSeconds + ' seconds before sending another request.',
+            message: 'A request was rejected. Please wait for ' + updateRequestIntervalSeconds + ' seconds before sending another request.',
             type: 'danger',
             duration: 3000,
           });

@@ -113,7 +113,7 @@ export async function stopShareScreen({ parameters }) {
   }
 
   try {
-    await reorderStreams({ add: false, changed: true, parameters })
+    await reorderStreams({ add: false, screenChanged: true, parameters })
   } catch (error) {
   }
 

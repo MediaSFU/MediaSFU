@@ -13,7 +13,7 @@ export async function reUpdateInter({ name, add, force = false, average = 127, p
   // function to periodically update the ui for active media streams
 
   let {
-    screenPageLimit, itemPageLimit, reorderInterval, fastOrderInterval, eventType,
+    screenPageLimit, itemPageLimit, reorderInterval, fastReOrderInterval, eventType,
     participants, allVideoStreams, shared, shareScreenStarted, adminNameStream, screenShareNameStream,
     updateMainWindow,
     sortAudioLoudness,
@@ -41,7 +41,7 @@ export async function reUpdateInter({ name, add, force = false, average = 127, p
 
     if (add) {
       const currentTime = Date.now();
-      if (((currentTime - lastReorderTime >= reorderInterval) && (average > 128.5)) || (average > 130 && currentTime - lastReorderTime >= fastOrderInterval)) {
+      if (((currentTime - lastReorderTime >= reorderInterval) && (average > 128.5)) || (average > 130 && currentTime - lastReorderTime >= fastReOrderInterval)) {
         lastReorderTime = currentTime;
         sortAudioLoudness = true;
         // updateMainWindow = true;
