@@ -29,6 +29,9 @@ export async function trigger({ ref_ActiveNames, parameters }) {
     // Function to trigger the updateScreen event
 
     // Get updated parameters
+
+    try {
+
     parameters = await parameters.getUpdatedAllParams();
 
     let {
@@ -42,6 +45,8 @@ export async function trigger({ ref_ActiveNames, parameters }) {
         eventType,
         shared,
         shareScreenStarted,
+        whiteboardStarted,
+        whiteboardEnded,
 
         updateScreenStates,
         updateUpdateDateState,
@@ -53,144 +58,146 @@ export async function trigger({ ref_ActiveNames, parameters }) {
         autoAdjust,
     } = parameters;
 
-    let personOnMainScreen = screenStates[0].mainScreenPerson;
-    let mainfilled = screenStates[0].mainScreenFilled;
-    let adminOnMain = screenStates[0].adminOnMainScreen
-    let mainScreenID = screenStates[0].mainScreenProducerId;
-    let nForReadjust_
-    let val1
-    let val2
+   
+        let personOnMainScreen = screenStates[0].mainScreenPerson;
 
-    let noww = new Date().getTime();
-    //get now in seconds
-    let timestamp = Math.floor(noww / 1000);
-
-
-    let eventPass = false
-    let mainPercent = 0
-    if (eventType == 'conference' && !(shared || shareScreenStarted)) {
-        eventPass = true
-
-        const admin = await participants.filter(participant => participant.isAdmin == true && participant.islevel == '2')
         let adminName = ""
+        const admin = await participants.filter(participant => participant.islevel == '2')
         if (admin.length > 0) {
-            adminName = await admin[0].name;
+          adminName = await admin[0].name;
         }
-
-        personOnMainScreen = await adminName
-        
-        if (!ref_ActiveNames.includes(adminName)) {
-            ref_ActiveNames.unshift(adminName)
+        if (personOnMainScreen === 'WhiteboardActive') {
+            personOnMainScreen = adminName;
         }
-    }
-
-    if ((mainfilled && personOnMainScreen != null && adminOnMain) || eventPass) {
-        //check if the person on main screen is still in the room
-
-        const admin = await participants.filter(participant => participant.isAdmin == true && participant.islevel == '2')
-        let adminName = ""
-        if (admin.length > 0) {
-            adminName = await admin[0].name;
+    
+        let mainfilled = screenStates[0].mainScreenFilled;
+        let adminOnMain = screenStates[0].adminOnMainScreen
+        let mainScreenID = screenStates[0].mainScreenProducerId;
+        let nForReadjust_
+        let val1
+        let val2
+    
+        let noww = new Date().getTime();
+        //get now in seconds
+        let timestamp = Math.floor(noww / 1000);
+    
+    
+        let eventPass = false
+        let mainPercent = 0
+        if (eventType == 'conference' && !(shared || shareScreenStarted)) {
+            eventPass = true
+    
+            personOnMainScreen = await adminName
+            
+            if (!ref_ActiveNames.includes(adminName)) {
+                ref_ActiveNames.unshift(adminName)
+            }
         }
+    
+        if ((mainfilled && personOnMainScreen != null && adminOnMain) || eventPass) {
+            //check if the person on main screen is still in the room
+    
+            //   ss = false
+    
+            if (eventType == 'conference') {
+                nForReadjust = nForReadjust + 1;
+                updateNForReadjust(nForReadjust)
+            }
 
-        //   ss = false
-
-        if (eventType == 'conference') {
-            nForReadjust = nForReadjust + 1;
-            updateNForReadjust(nForReadjust)
-        }
-
-        nForReadjust_ = ref_ActiveNames.length
-
-
-        if (nForReadjust_ == 0 && eventType == 'webinar') {
-            val1 = 0
-            val2 = 12 //main
-
-        } else {
-
+            if (!ref_ActiveNames.includes(adminName) && (whiteboardStarted && !whiteboardEnded)) {
+                ref_ActiveNames.unshift(adminName)
+            }
+    
+            nForReadjust_ = ref_ActiveNames.length
+    
+    
+            if (nForReadjust_ == 0 && eventType == 'webinar') {
+                val1 = 0
+                val2 = 12 //main
+    
+            } else {
+    
+                const [val11, val22] = await autoAdjust({ n: nForReadjust_, parameters });
+    
+                val1 = val11
+                val2 = val22
+            }
+    
+            let calc1 = await Math.floor((val1 / 12) * 100);
+            let calc2 = await 100 - calc1;
+    
+    
+    
+    
+            //check if lastUpdate is not null and at least same seconds
+            if (lastUpdate == null || (updateDateState != timestamp)) {
+    
+                let now = await new Date();
+    
+                await socket.emit('updateScreenClient', { roomName, names: ref_ActiveNames, mainPercent: calc2, mainScreenPerson: personOnMainScreen, viewType: eventType }, ({ success, reason }) => {
+                    updateDateState = timestamp
+                    updateUpdateDateState(updateDateState)
+                    lastUpdate = now
+                    updateLastUpdate(lastUpdate)
+                    if (success) {
+                      
+    
+                    } else {
+                        console.log(reason, 'updateScreenClient failed')
+                    }
+    
+                });
+    
+            }
+    
+        } else if (mainfilled && personOnMainScreen != null && !adminOnMain) {
+            //check if the person on main screen is still in the room
+            //   ss = true
+    
+            nForReadjust_ = ref_ActiveNames.length
+    
+            if (!ref_ActiveNames.includes(adminName)) {
+                ref_ActiveNames.unshift(adminName)
+                nForReadjust_ = ref_ActiveNames.length
+            }
+    
             const [val11, val22] = await autoAdjust({ n: nForReadjust_, parameters });
-
             val1 = val11
             val2 = val22
+    
+            const calc1 = await Math.floor((val1 / 12) * 100);
+            const calc2 = await 100 - calc1;
+    
+    
+            if (lastUpdate == null || (updateDateState != timestamp)) {
+    
+                let now = await new Date();
+    
+             
+    
+                await socket.emit('updateScreenClient', { roomName, names: ref_ActiveNames, mainPercent: calc2, mainScreenPerson: personOnMainScreen, viewType: eventType }, ({ success, reason }) => {
+                    updateDateState = timestamp
+                    updateUpdateDateState(updateDateState)
+                    lastUpdate = now
+                    updateLastUpdate(lastUpdate)
+                    if (success) {
+    
+                    } else {
+                        console.log(reason, 'updateScreenClient failed')
+                    }
+    
+                });
+    
+            }
+    
+        } else {
+            //stop recording
+            console.log('trigger stopRecording')
         }
-
-        let calc1 = await Math.floor((val1 / 12) * 100);
-        let calc2 = await 100 - calc1;
-
-
-
-
-        //check if lastUpdate is not null and at least same seconds
-        if (lastUpdate == null || (updateDateState != timestamp)) {
-
-            let now = await new Date();
-
-            await socket.emit('updateScreenClient', { roomName, names: ref_ActiveNames, mainPercent: calc2, mainScreenPerson: personOnMainScreen, viewType: eventType }, ({ success, reason }) => {
-                updateDateState = timestamp
-                updateUpdateDateState(updateDateState)
-                lastUpdate = now
-                updateLastUpdate(lastUpdate)
-                if (success) {
-                  
-
-                } else {
-                    console.log(reason, 'updateScreenClient failed')
-                }
-
-            });
-
-        }
-
-    } else if (mainfilled && personOnMainScreen != null && !adminOnMain) {
-        //check if the person on main screen is still in the room
-        const admin = await participants.filter(participant => participant.isAdmin == true && participant.islevel == '2')
-        let adminName = ""
-        if (admin.length > 0) {
-            adminName = await admin[0].name;
-        }
-
-        //   ss = true
-
-        nForReadjust_ = ref_ActiveNames.length
-
-        if (!ref_ActiveNames.includes(adminName)) {
-            ref_ActiveNames.unshift(adminName)
-            nForReadjust_ = ref_ActiveNames.length
-        }
-
-        const [val11, val22] = await autoAdjust({ n: nForReadjust_, parameters });
-        val1 = val11
-        val2 = val22
-
-        const calc1 = await Math.floor((val1 / 12) * 100);
-        const calc2 = await 100 - calc1;
-
-
-        if (lastUpdate == null || (updateDateState != timestamp)) {
-
-            let now = await new Date();
-
-         
-
-            await socket.emit('updateScreenClient', { roomName, names: ref_ActiveNames, mainPercent: calc2, mainScreenPerson: personOnMainScreen, viewType: eventType }, ({ success, reason }) => {
-                updateDateState = timestamp
-                updateUpdateDateState(updateDateState)
-                lastUpdate = now
-                updateLastUpdate(lastUpdate)
-                if (success) {
-
-                } else {
-                    console.log(reason, 'updateScreenClient failed')
-                }
-
-            });
-
-        }
-
-    } else {
-        //stop recording
-        console.log('trigger stopRecording')
+    
+    } catch (error) {
+        console.log('Error triggering updateScreen:', error);
     }
 
+  
 }

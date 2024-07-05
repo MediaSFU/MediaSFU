@@ -13,7 +13,7 @@ import { onScreenChanges } from "./onScreenChanges";
  * @param {number} options.parameters.mainHeightWidth - The main height width value.
  * @param {number} options.parameters.prevMainHeightWidth - The previous main height width value.
  * @param {number} options.parameters.nForReadjust - The value used for readjustment.
- * @param {string} options.parameters.HostLabel - The label for the host.
+ * @param {string} options.parameters.hostLabel - The label for the host.
  * @param {boolean} options.parameters.first_round - Indicates if it's the first round.
  * @param {boolean} options.parameters.lock_screen - Indicates if the screen is locked.
  * @param {boolean} options.parameters.isBrowserBarHidden - Indicates if the browser bar is hidden.
@@ -35,7 +35,7 @@ export async function readjust({ n, state, parameters }) {
         mainHeightWidth,
         prevMainHeightWidth,
         nForReadjust,
-        HostLabel,
+        hostLabel,
         first_round,
         lock_screen,
 
@@ -120,10 +120,10 @@ export async function readjust({ n, state, parameters }) {
    if (prevMainHeightWidth != mainHeightWidth) {
 
      if (!lock_screen && !shared) {
-       await prepopulateUserMedia({name: HostLabel,parameters})
+       await prepopulateUserMedia({name: hostLabel,parameters})
      } else {
        if (!first_round) {
-         await prepopulateUserMedia({name: HostLabel,parameters})
+         await prepopulateUserMedia({name: hostLabel,parameters})
        }
      }
 

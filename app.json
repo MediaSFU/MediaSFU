@@ -43,6 +43,9 @@
         "android.permission.RECORD_AUDIO"
       ]
     },
+    "web": {
+      "bundler": "metro"
+    },
     "plugins": [
       [
         "@config-plugins/react-native-webrtc",
@@ -66,7 +69,7 @@
     ],
     "extra": {
       "eas": {
-        "projectId": "31f446bb-00b2-47hh-89b7-b4g4799e2d85"
+        "projectId": "2df576bb-69e8-47bd-89b7-b3f6799e1a85"
       }
     }
   }

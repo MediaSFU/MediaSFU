@@ -10,7 +10,7 @@
  * @param {boolean} options.parameters.lock_screen - Indicates whether the screen is locked.
  * @param {boolean} options.parameters.shared - Indicates whether the screen is being shared.
  * @param {boolean} options.parameters.updateMainWindow - The function to update the main window state.
- * @param {string} options.parameters.HostLabel - The label for the host.
+ * @param {string} options.parameters.hostLabel - The label for the host.
  * @param {string} options.parameters.roomName - The name of the room.
  * @param {Function} options.parameters.updateAudioProducer - The function to update the audio producer state.
  * @param {Function} options.parameters.updateUpdateMainWindow - The function to update the main window update state.
@@ -28,7 +28,7 @@ export const disconnectSendTransportAudio = async ({ parameters }) => {
       lock_screen,
       shared,
       updateMainWindow,
-      HostLabel,
+      hostLabel,
       roomName,
       updateAudioProducer,
       updateUpdateMainWindow,
@@ -46,7 +46,7 @@ export const disconnectSendTransportAudio = async ({ parameters }) => {
       if (!lock_screen && !shared) {
         updateMainWindow = true;
         updateUpdateMainWindow(updateMainWindow);
-        await prepopulateUserMedia({ name: HostLabel, parameters });
+        await prepopulateUserMedia({ name: hostLabel, parameters });
         updateMainWindow = false;
         updateUpdateMainWindow(updateMainWindow);
       }

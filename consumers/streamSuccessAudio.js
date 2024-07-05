@@ -18,7 +18,7 @@
  * @param {object} options.parameters.params - Additional parameters related to the audio stream.
  * @param {object} options.parameters.audioParamse - Additional parameters related to the audio stream.
  * @param {object} options.parameters.aParams - Additional parameters related to the audio stream.
- * @param {string} options.parameters.HostLabel - The label for the host.
+ * @param {string} options.parameters.hostLabel - The label for the host.
  * @param {string} options.parameters.islevel - The user level.
  * @param {function} options.parameters.updateMainWindow - Function to update the main window state.
  * @param {boolean} options.parameters.lock_screen - Indicates if the screen is locked.
@@ -42,77 +42,81 @@
  */
 
 import { MediaStream } from '../methods/utils/webrtc/webrtc'
+export const streamSuccessAudio = async ({ stream, parameters }) => {
 
-export const streamSuccessAudio = async ({stream,parameters}) => {
-
-    let {
-        socket,
-        participants,
-        localStream,
-        transportCreated,   
-        transportCreatedAudio,
-        audioAlreadyOn,
-        micAction,
-        audioParams,
-        localStreamAudio,
-        defAudioID,
-        userDefaultAudioInputDevice,
-        params,
-        audioParamse,
-        aParams,
-        HostLabel,
-        islevel,
-        updateMainWindow,
-        lock_screen,
-        shared,
-        videoAlreadyOn,
-
-
-         
-        //update functions
-        updateParticipants,
-        updateTransportCreated,
-        updateTransportCreatedAudio,
-        updateAudioAlreadyOn,
-        updateMicAction,
-        updateAudioParams,
-        updateLocalStream,
-        updateLocalStreamAudio,
-        updateDefAudioID,
-        updateUserDefaultAudioInputDevice,
-        updateUpdateMainWindow,
-   
-
-        //mediasfu functions
-        createSendTransport,
-        connectSendTransportAudio,
-        resumeSendTransportAudio,
-        prepopulateUserMedia
-
-
-    } = parameters;
+  let {
+    socket,
+    participants,
+    localStream,
+    transportCreated,
+    transportCreatedAudio,
+    audioAlreadyOn,
+    micAction,
+    audioParams,
+    localStreamAudio,
+    defAudioID,
+    userDefaultAudioInputDevice,
+    params,
+    audioParamse,
+    aParams,
+    hostLabel,
+    islevel,
+    member,
+    updateMainWindow,
+    lock_screen,
+    shared,
+    videoAlreadyOn,
+    showAlert,
 
 
 
-    localStreamAudio = await stream
-    updateLocalStreamAudio(localStreamAudio);
-    //add the audio stream track to the localStream
-    //if there localStream is null then add the audio stream to the localStream else add the audio stream track to the localStream
-    if (localStream == null) {
-      localStream = await new MediaStream([localStreamAudio.getAudioTracks()[0]]);
-      updateLocalStream(localStream);
-    } else {
-      localStream.addTrack(localStreamAudio.getAudioTracks()[0]);
-      updateLocalStream(localStream);
-    }
+    //update functions
+    updateParticipants,
+    updateTransportCreated,
+    updateTransportCreatedAudio,
+    updateAudioAlreadyOn,
+    updateMicAction,
+    updateAudioParams,
+    updateLocalStream,
+    updateLocalStreamAudio,
+    updateDefAudioID,
+    updateUserDefaultAudioInputDevice,
+    updateUpdateMainWindow,
 
-    const audioTracked = await localStream.getAudioTracks()[0];
-    defAudioID = await audioTracked.getSettings().deviceId;
-    userDefaultAudioInputDevice = await defAudioID;
 
-    //update the state variables
-    updateDefAudioID(defAudioID);
-    updateUserDefaultAudioInputDevice(userDefaultAudioInputDevice);
+    //mediasfu functions
+    createSendTransport,
+    connectSendTransportAudio,
+    resumeSendTransportAudio,
+    prepopulateUserMedia
+
+
+  } = parameters;
+
+
+
+  localStreamAudio = await stream
+  updateLocalStreamAudio(localStreamAudio);
+  //add the audio stream track to the localStream
+  //if there localStream is null then add the audio stream to the localStream else add the audio stream track to the localStream
+  if (localStream == null) {
+    localStream = await new MediaStream([localStreamAudio.getAudioTracks()[0]]);
+    updateLocalStream(localStream);
+  } else {
+    localStream.addTrack(localStreamAudio.getAudioTracks()[0]);
+    updateLocalStream(localStream);
+  }
+
+  const audioTracked = await localStream.getAudioTracks()[0];
+  defAudioID = await audioTracked.getSettings().deviceId;
+  userDefaultAudioInputDevice = await defAudioID;
+
+  //update the state variables
+  updateDefAudioID(defAudioID);
+  updateUserDefaultAudioInputDevice(userDefaultAudioInputDevice);
+
+
+  try {
 
     params = aParams;
     audioParamse = { params }
@@ -131,58 +135,68 @@ export const streamSuccessAudio = async ({stream,parameters}) => {
             audioParams: audioParams,
           },
           option: 'audio'
-         });
+        });
       } catch (error) {
-       
+
       }
-    
- 
+
+
     } else {
       if (!transportCreatedAudio) {
-        await connectSendTransportAudio({ 
+        await connectSendTransportAudio({
           audioParams,
           parameters
-           });
+        });
       } else {
         await resumeSendTransportAudio({ parameters });
       }
     }
-
-    //update the participants array to reflect the change
-    audioAlreadyOn = true;
-    updateAudioAlreadyOn(audioAlreadyOn);
-
-    if (micAction == true) {
-      micAction = false;
-      updateMicAction(micAction);
+  } catch (error) {
+    if (showAlert) {
+      showAlert({
+        message: error.message,
+        type: 'danger',
+        duration: 3000
+      })
     }
-
-    //update the participants array to reflect the change
-    await participants.forEach((participant) => {
-      if (participant.socketId == socket.id && participant.name == member) {
-        participant.muted = false;
-      }
-    });
-    updateParticipants(participants);
-
-    // //update the transport created state
-    transportCreated = true;
-    transportCreatedAudio = true;
-    updateTransportCreated(transportCreated);
-    updateTransportCreatedAudio(transportCreatedAudio);
-
-    //reupdate screen display if host
-    if (videoAlreadyOn == false && islevel == '2') {
-
-      if (!lock_screen && !shared) {
-        updateMainWindow = true;
-        updateUpdateMainWindow(updateMainWindow)
-        await prepopulateUserMedia({name: HostLabel, parameters})
-        updateMainWindow = false;
-        updateUpdateMainWindow(updateMainWindow)
-      }
-    }
-
-    
-
   }
+
+
+  //update the participants array to reflect the change
+  audioAlreadyOn = true;
+  updateAudioAlreadyOn(audioAlreadyOn);
+
+  if (micAction == true) {
+    micAction = false;
+    updateMicAction(micAction);
+  }
+
+  //update the participants array to reflect the change
+  await participants.forEach((participant) => {
+    if (participant.socketId == socket.id && participant.name == member) {
+      participant.muted = false;
+    }
+  });
+  updateParticipants(participants);
+
+  // //update the transport created state
+  transportCreated = true;
+  transportCreatedAudio = true;
+  updateTransportCreated(transportCreated);
+  updateTransportCreatedAudio(transportCreatedAudio);
+
+  //reupdate screen display if host
+  if (videoAlreadyOn == false && islevel == '2') {
+
+    if (!lock_screen && !shared) {
+      updateMainWindow = true;
+      updateUpdateMainWindow(updateMainWindow)
+      await prepopulateUserMedia({ name: hostLabel, parameters })
+      updateMainWindow = false;
+      updateUpdateMainWindow(updateMainWindow)
+    }
+  }
+
+
+
+}

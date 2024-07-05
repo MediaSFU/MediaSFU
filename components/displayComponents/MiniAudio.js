@@ -122,9 +122,7 @@ const MiniAudio = ({
                 <Text style={{ ...styles.nameText, color: textColor, ...nameTextStyling }}>{name}</Text>
             </View>
             <View style={{ ...getOverlayPosition(overlayPosition), ...(Platform.OS === 'web' ? styles.overlayWeb : styles.overlayMobile) }}>
-              <View>
-                {/* <Text style={{ ...styles.nameText, color: textColor }}>{name}</Text> */}
-              </View>
+        
               <View style={{ ...(Platform.OS === 'web' ? styles.waveformWeb : styles.waveformMobile) }}>
                 {waveformAnimations.map((animation, index) => (
                   <Animated.View
@@ -142,7 +140,6 @@ const MiniAudio = ({
                   />
                 ))}
               </View>
-              <View></View>
             </View>
           </View>
         </Animated.View>

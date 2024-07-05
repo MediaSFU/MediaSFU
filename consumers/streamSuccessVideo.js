@@ -17,7 +17,7 @@
  * @param {string} options.parameters.userDefaultVideoInputDevice - The user's default video input device.
  * @param {object} options.parameters.params - Additional parameters related to the video stream.
  * @param {object} options.parameters.videoParamse - Additional parameters related to the video stream.
- * @param {object} options.parameters.HostLabel - The label for the host.
+ * @param {object} options.parameters.hostLabel - The label for the host.
  * @param {string} options.parameters.islevel - The user level.
  * @param {function} options.parameters.updateMainWindow - Function to update the main window state.
  * @param {boolean} options.parameters.lock_screen - Indicates if the screen is locked.
@@ -71,7 +71,7 @@ export const streamSuccessVideo = async ({ stream, parameters }) => {
       userDefaultVideoInputDevice,
       params,
       videoParamse,
-      HostLabel,
+      hostLabel,
       islevel,
       member,
       updateMainWindow,
@@ -84,7 +84,10 @@ export const streamSuccessVideo = async ({ stream, parameters }) => {
       currentFacingMode,
       device,
       rtpCapabilities,
-
+      keepBackground,
+      appliedBackground,
+      videoProducer,
+      autoClickBackground,
 
 
       //update functions
@@ -101,6 +104,11 @@ export const streamSuccessVideo = async ({ stream, parameters }) => {
       updateUpdateMainWindow,
       updateParticipants,
       updateVideoParams,
+      updateKeepBackground,
+      updateAppliedBackground,
+      updateIsBackgroundModalVisible,
+      updateVideoProducer,
+      updateAutoClickBackground,
 
 
       //mediasoup functions
@@ -108,6 +116,7 @@ export const streamSuccessVideo = async ({ stream, parameters }) => {
       connectSendTransportVideo,
       showAlert,
       reorderStreams,
+      sleep,
 
 
     } = parameters;
@@ -176,7 +185,16 @@ export const streamSuccessVideo = async ({ stream, parameters }) => {
       videoParams = await { track: localStream.getVideoTracks()[0], ...videoParamse, codecs };
       await updateVideoParams(videoParams)
 
-
+      if (keepBackground && appliedBackground) {
+        videoAlreadyOn = true;
+        updateVideoAlreadyOn(videoAlreadyOn)
+        
+        await updateAutoClickBackground(true)
+        await updateIsBackgroundModalVisible(true)
+        await sleep(500);
+        await updateIsBackgroundModalVisible(false)
+        await updateAutoClickBackground(false)
+      } else {
       if (!transportCreated) {
 
         try {
@@ -192,11 +210,18 @@ export const streamSuccessVideo = async ({ stream, parameters }) => {
         }
 
       } else {
+
+          try {
+            await videoProducer.close();
+            await sleep(500);
+          } catch (error) {
+          }
         await connectSendTransportVideo({
           parameters: parameters,
           videoParams: videoParams
         });
 
+        }
       }
 
     } catch (error) {

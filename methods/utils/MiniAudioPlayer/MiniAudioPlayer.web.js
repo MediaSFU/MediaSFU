@@ -59,16 +59,20 @@ const MiniAudioPlayer = ({
         //mediasfu functions
         reUpdateInter,
         updateParticipantAudioDecibels,
+        paginatedStreams,
+        currentUserPage,
+
+        breakOutRoomStarted,
+        breakOutRoomEnded,
+        limitedBreakRoom,
 
     } = parameters;
-
 
     const audioContext = new AudioContext();
 
     const [showWaveModal, setShowWaveModal] = useState(false);
     const [isMuted, setIsMuted] = useState(false);
-    const autoWaveCheck = useRef(false)
-
+    const autoWaveCheck = useRef(false);
 
     useEffect(() => {
 
@@ -83,7 +87,7 @@ const MiniAudioPlayer = ({
 
             const intervalId = setInterval(() => {
                 analyser.getByteTimeDomainData(dataArray);
-                const averageLoudness = Array.from(dataArray).reduce((sum, value) => sum + value, 0) / bufferLength;
+                let averageLoudness = Array.from(dataArray).reduce((sum, value) => sum + value, 0) / bufferLength;
 
 
                 parameters = getUpdatedAllParams()
@@ -103,7 +107,18 @@ const MiniAudioPlayer = ({
                     currentUserPage,
                 } = parameters;
 
-                const participant = participants.find(obj => obj.audioID === remoteProducerId);
+                let participant = participants.find(obj => obj.audioID === remoteProducerId);
+
+                let audioActiveInRoom = true;
+                if (participant) {
+                  if (breakOutRoomStarted && !breakOutRoomEnded) {
+                    //participant name must be in limitedBreakRoom
+                    if (!limitedBreakRoom.map(obj => obj.name).includes(participant.name)) {
+                      audioActiveInRoom = false;
+                      averageLoudness = 127;
+                    }
+                  }
+                }
 
                 if (meetingDisplayType != 'video') {
                     autoWaveCheck.current = true;
@@ -145,8 +160,7 @@ const MiniAudioPlayer = ({
                         autoWaveCheck.current = true
                     }
 
-                    // Check if the participant has a video ID
-                    if (participant.videoID || autoWaveCheck.current) {
+                    if (participant.videoID || autoWaveCheck.current || audioActiveInRoom) {
                         setShowWaveModal(false)
 
                         // Update waveform visibility based on audio level

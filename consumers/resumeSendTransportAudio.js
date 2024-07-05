@@ -6,7 +6,7 @@
  * @param {Object} options.parameters.audioProducer - The audio producer object.
  * @param {string} options.parameters.islevel - The level of the user.
  * @param {Function} options.parameters.updateMainWindow - Function to update the main window.
- * @param {string} options.parameters.HostLabel - The label of the host.
+ * @param {string} options.parameters.hostLabel - The label of the host.
  * @param {boolean} options.parameters.lock_screen - Flag indicating whether the screen is locked.
  * @param {boolean} options.parameters.shared - Flag indicating whether the screen is shared.
  * @param {Function} options.parameters.updateAudioProducer - Function to update the audio producer state.
@@ -14,7 +14,7 @@
  */
 export const resumeSendTransportAudio = async ({ parameters }) => {
   try {
-    let { audioProducer, islevel, updateMainWindow, HostLabel, lock_screen, shared, 
+    let { audioProducer, islevel, updateMainWindow, hostLabel, lock_screen, shared, 
       updateAudioProducer, videoAlreadyOn,updateUpdateMainWindow,
       
       //mediasfu functions
@@ -29,7 +29,7 @@ export const resumeSendTransportAudio = async ({ parameters }) => {
       if (!lock_screen && !shared) {
         updateMainWindow=true;
         updateUpdateMainWindow(updateMainWindow);
-        await prepopulateUserMedia({ name: HostLabel, parameters });
+        await prepopulateUserMedia({ name: hostLabel, parameters });
         updateMainWindow=false;
         updateUpdateMainWindow(updateMainWindow);
       }

@@ -41,6 +41,14 @@ import ConfirmHereModal from '../miscComponents/ConfirmHereModal';
 import ShareEventModal from '../miscComponents/ShareEventModal';
 import WelcomePage from '../miscComponents/WelcomePage';
 
+import PollModal from '../pollsComponents/PollModal';
+// import BackgroundModal from '../backgroundComponents/BackgroundModal';
+import BreakoutRoomsModal from '../breakoutComponents/BreakoutRoomsModal';
+// import ConfigureWhiteboardModal from '../whiteboardComponents/ConfigureWhiteboardModal';
+// import Whiteboard from '../whiteboardComponents/Whiteboard';
+// import Screenboard from '../screenboardComponents/Screenboard';
+// import ScreenboardModal from '../screenboardComponents/ScreenboardModal';
+
 //pagination and display of media (samples)
 import Pagination from '../displayComponents/Pagination';
 import FlexibleGrid from '../displayComponents/FlexibleGrid';
@@ -61,6 +69,11 @@ import { launchRequests } from '../../methods/requestsMethods/launchRequests';
 import { launchParticipants } from '../../methods/participantsMethods/launchParticipants';
 import { launchMessages } from '../../methods/messageMethods/launchMessages';
 import { launchConfirmExit } from '../../methods/exitMethods/launchConfirmExit';
+
+import { launchPoll } from '../../methods/pollsMethods/launchPoll';
+// import { launchBackground } from '../../methods/backgroundMethods/launchBackground';
+import { launchBreakoutRooms } from '../../methods/breakoutRoomsMethods/launchBreakoutRooms';
+// import { launchConfigureWhiteboard } from '../../methods/whiteboardMethods/launchConfigureWhiteboard';
 
 // Import the platform-specific WebRTC module (options are for ios, android, web)
 import { mediaDevices, RTCView, registerGlobals, MediaStream, MediaStreamTrack } from '../../methods/utils/webrtc/webrtc';
@@ -134,6 +147,13 @@ import { receiveRoomMessages } from '../../consumers/receiveRoomMessages';
 import { formatNumber } from '../../methods/utils/formatNumber';
 import { connectIps } from '../../consumers/connectIps';
 
+import { pollUpdated } from '../../methods/pollsMethods/pollUpdated';
+import { handleCreatePoll } from '../../methods/pollsMethods/handleCreatePoll';
+import { handleVotePoll } from '../../methods/pollsMethods/handleVotePoll';
+import { handleEndPoll } from '../../methods/pollsMethods/handleEndPoll';
+
+import { breakoutRoomUpdated } from '../../methods/breakoutRoomsMethods/breakoutRoomUpdated';
+
 import { startMeetingProgressTimer } from '../../methods/utils/meetingTimer/startMeetingProgressTimer';
 import { updateRecording } from '../../methods/recordingMethods/updateRecording';
 import { stopRecording } from '../../methods/recordingMethods/stopRecording';
@@ -168,7 +188,11 @@ import { allMembers } from '../../producers/socketReceiveMethods/allMembers';
 import { allMembersRest } from '../../producers/socketReceiveMethods/allMembersRest';
 import { disconnect } from '../../producers/socketReceiveMethods/disconnect';
 
-function MediasfuGeneric({ PrejoinPage=WelcomePage, credentials={credentials}, useLocalUIMode = false, seedData = {}, useSeed = false }) {
+// import {captureCanvasStream} from '../../methods/whiteboardMethods/captureCanvasStream';
+import {resumePauseAudioStreams} from '../../consumers/resumePauseAudioStreams';
+import { processConsumerTransportsAudio } from '../../consumers/processConsumerTransportsAudio';
+
+function MediasfuGeneric({ PrejoinPage = WelcomePage, credentials = { credentials }, useLocalUIMode = false, seedData = {}, useSeed = false }) {
 
     //validated is true if the user has entered the correct details and checked from the server
     const [validated, setValidated] = useState(useLocalUIMode); // Validated
@@ -267,7 +291,7 @@ function MediasfuGeneric({ PrejoinPage=WelcomePage, credentials={credentials}, u
     const confirmedToRecord = useRef(false); // True if the user has confirmed to record
     const meetingDisplayType = useRef('media'); // Meeting display type, i.e., 'media', 'video', or 'all'
     const meetingVideoOptimized = useRef(false); // True if the meeting video is optimized
-    const eventType = useRef(useSeed && seedData?.eventType ? seedData?.eventType : 'broadcast'); // Event type
+    const eventType = useRef(useSeed && seedData?.eventType ? seedData?.eventType : 'webinar'); // Event type
     const participants = useRef(useSeed && seedData?.participants ? seedData?.participants : []); // Participants
     const filteredParticipants = useRef(participants.current); // Filtered participants
     const participantsCounter = useRef(0); // Participants counter
@@ -680,7 +704,7 @@ function MediasfuGeneric({ PrejoinPage=WelcomePage, credentials={credentials}, u
     const chatRequestTime = useRef(0); // Chat request time
     const updateRequestIntervalSeconds = useRef(240); // Update request interval in seconds
     const oldSoundIds = useRef([]); // Array of old sound IDs
-    const HostLabel = useRef('Host'); // Host label
+    const hostLabel = useRef('Host'); // Host label
     const mainScreenFilled = useRef(false); // True if the main screen is filled
     const localStreamScreen = useRef(null); // Local stream screen
     const [screenAlreadyOn, setScreenAlreadyOn] = useState(false); // True if the screen is already on
@@ -712,9 +736,9 @@ function MediasfuGeneric({ PrejoinPage=WelcomePage, credentials={credentials}, u
     const fixedPageLimit = useRef(4); // Fixed page limit for pagination
     const removeAltGrid = useRef(false); // True if the alt grid should be removed
     const nForReadjust = useRef(0); // Number of times for readjusting the recording
-    const reOrderInterval = useRef(30000); // Reorder interval
-    const fastReOrderInterval = useRef(10000); // Fast reorder interval
-    const lastReOrderTime = useRef(0); // Last reorder time
+    const reorderInterval = useRef(30000); // Reorder interval
+    const fastReorderInterval = useRef(10000); // Fast reorder interval
+    const lastReorderTime = useRef(0); // Last reorder time
     const audStreamNames = useRef([]); // Array of audio stream names
     const currentUserPage = useRef(0); // Current user page
     const [mainHeightWidth, setMainHeightWidth] = useState(eventType.current == 'webinar' ? 67 : eventType.current == 'broadcast' ? 100 : 0); // Main height and width
@@ -954,8 +978,8 @@ function MediasfuGeneric({ PrejoinPage=WelcomePage, credentials={credentials}, u
         oldSoundIds.current = value;
     }
 
-    const updateHostLabel = (value) => {
-        HostLabel.current = value;
+    const updatehostLabel = (value) => {
+        hostLabel.current = value;
     }
 
     const updateMainScreenFilled = (value) => {
@@ -1082,8 +1106,8 @@ function MediasfuGeneric({ PrejoinPage=WelcomePage, credentials={credentials}, u
         nForReadjust.current = value;
     }
 
-    const updateLastReOrderTime = (value) => {
-        lastReOrderTime.current = value;
+    const updateLastReorderTime = (value) => {
+        lastReorderTime.current = value;
     }
 
     const updateAudStreamNames = (value) => {
@@ -1714,6 +1738,11 @@ function MediasfuGeneric({ PrejoinPage=WelcomePage, credentials={credentials}, u
     const consumerTransports = useRef([]); // Consumer transports
     const consumingTransports = useRef([]); // Consuming transports
 
+    //polls related variables
+    const polls = useRef(useSeed && seedData?.polls ? seedData?.polls : []); // Polls
+    const poll = useRef(null); // Poll
+    const [isPollModalVisible, setIsPollModalVisible] = useState(false); // True if the poll modal should be shown
+
 
     const updateTransportCreated = (value) => {
         transportCreated.current = value;
@@ -1762,6 +1791,174 @@ function MediasfuGeneric({ PrejoinPage=WelcomePage, credentials={credentials}, u
     const updateConsumingTransports = (value) => {
         consumingTransports.current = value;
     }
+
+    const updatePolls = (value) => {
+        polls.current = value;
+    }
+
+    const updatePoll = (value) => {
+        poll.current = value;
+    }
+
+    const updateIsPollModalVisible = (value) => {
+        setIsPollModalVisible(value);
+    }
+
+
+    //breakout rooms related variables
+    const breakoutRooms = useRef(useSeed && seedData?.breakoutRooms ? seedData?.breakoutRooms : []); // Breakout rooms
+    const currentRoomIndex = useRef(0); // Current room index
+    const canStartBreakout = useRef(false); // True if the breakout room can be started
+    const breakOutRoomStarted = useRef(false); // True if the breakout room has started
+    const breakOutRoomEnded = useRef(false); // True if the breakout room has ended
+    const hostNewRoom = useRef(-1); // Host new room
+    const limitedBreakRoom = useRef([]); // Limited breakout room
+    const mainRoomsLength = useRef(0); // Main rooms length
+    const memberRoom = useRef(-1); // Member room
+    const [isBreakoutRoomsModalVisible, setIsBreakoutRoomsModalVisible] = useState(false); // True if the breakout rooms modal should be showns
+
+    const updateBreakoutRooms = (value) => {
+        breakoutRooms.current = value;
+    }
+
+    const updateCurrentRoomIndex = (value) => {
+        currentRoomIndex.current = value;
+    }
+
+    const updateCanStartBreakout = (value) => {
+        canStartBreakout.current = value;
+    }
+
+    const updateBreakOutRoomStarted = (value) => {
+        breakOutRoomStarted.current = value;
+    }
+
+    const updateBreakOutRoomEnded = (value) => {
+        breakOutRoomEnded.current = value;
+    }
+
+    const updateHostNewRoom = (value) => {
+        hostNewRoom.current = value;
+    }
+
+    const updateLimitedBreakRoom = (value) => {
+        limitedBreakRoom.current = value;
+    }
+
+    const updateMainRoomsLength = (value) => {
+        mainRoomsLength.current = value;
+    }
+
+    const updateMemberRoom = (value) => {
+        memberRoom.current = value;
+    }
+
+    const updateIsBreakoutRoomsModalVisible = (value) => {
+        setIsBreakoutRoomsModalVisible(value);
+    }
+
+    // whiteboard related variables
+    const whiteboardUsers = useRef(useSeed && seedData?.whiteboardUsers ? seedData?.whiteboardUsers : []); // Whiteboard users
+    const currentWhiteboardIndex = useRef(null); // Current whiteboard index
+    const canStartWhiteboard = useRef(false); // True if the whiteboard can be started
+    const whiteboardStarted = useRef(false); // True if the whiteboard has started
+    const whiteboardEnded = useRef(false); // True if the whiteboard has ended
+    const whiteboardLimit = useRef(itemPageLimit.current); // Whiteboard limit
+    const [isWhiteboardModalVisible, setIsWhiteboardModalVisible] = useState(false); // True if the whiteboard modal should be shown
+    const [isConfigureWhiteboardModalVisible, setIsConfigureWhiteboardModalVisible] = useState(false); // True if the configure whiteboard modal should be shown
+    const shapes = useRef([]); // Shapes
+    const useImageBackground = useRef(true); // Use image background
+    const redoStack = useRef([]); // Redo stack
+    const undoStack = useRef([]); // Undo stack
+    const canvasStream = useRef(null); // Canvas stream
+    const canvasWhiteboard = useRef(null); // Canvas reference
+
+    const updateWhiteboardUsers = (value) => {
+        whiteboardUsers.current = value;
+    }
+
+    const updateCurrentWhiteboardIndex = (value) => {
+        currentWhiteboardIndex.current = value;
+    }
+
+    const updateCanStartWhiteboard = (value) => {
+        canStartWhiteboard.current = value;
+    }
+
+    const updateWhiteboardStarted = (value) => {
+        whiteboardStarted.current = value;
+    }
+
+    const updateWhiteboardEnded = (value) => {
+        whiteboardEnded.current = value;
+    }
+
+    const updateWhiteboardLimit = (value) => {
+        whiteboardLimit.current = value;
+    }
+
+    const updateIsWhiteboardModalVisible = (value) => {
+        setIsWhiteboardModalVisible(value);
+    }
+
+    const updateIsConfigureWhiteboardModalVisible = (value) => {
+        setIsConfigureWhiteboardModalVisible(value);
+    }
+
+    const updateShapes = (value) => {
+        shapes.current = value;
+    }
+
+    const updateUseImageBackground = (value) => {
+        useImageBackground.current = value;
+    }
+
+    const updateRedoStack = (value) => {
+        redoStack.current = value;
+    }
+
+    const updateUndoStack = (value) => {
+        undoStack.current = value;
+    }
+
+    const updateCanvasStream = (value) => {
+        canvasStream.current = value;
+    }
+
+    const updateCanvasWhiteboard = (value) => {
+        canvasWhiteboard.current = value;
+    }
+
+
+    //screenboard related variables
+    const canvasScreenboard = useRef(null); // Canvas screenboard
+    const processedScreenStream = useRef(null); // Processed screen stream
+    const annotateScreenStream = useRef(false); // Annotate screen stream
+    const mainScreenCanvas = useRef(null); // Main screen canvas
+    const [isScreenboardModalVisible, setIsScreenboardModalVisible] = useState(false); // True if the screenboard modal should be shown
+
+    const updateCanvasScreenboard = (value) => {
+        canvasScreenboard.current = value;
+    }
+
+    const updateProcessedScreenStream = (value) => {
+        processedScreenStream.current = value;
+    }
+
+    const updateAnnotateScreenStream = (value) => {
+        annotateScreenStream.current = value;
+    }
+
+    const updateMainScreenCanvas = (value) => {
+        mainScreenCanvas.current = value;
+    }
+
+    const updateIsScreenboardModalVisible = (value) => {
+        setIsScreenboardModalVisible(value);
+    }
+
+
+
 
     function checkOrientation() {
         // Check the device orientation using react-native-orientation-locker
@@ -1833,6 +2030,15 @@ function MediasfuGeneric({ PrejoinPage=WelcomePage, credentials={credentials}, u
             connectIps,
             createDeviceClient,
 
+            handleCreatePoll,
+            handleEndPoll,
+            handleVotePoll,
+
+            // captureCanvasStream,
+            resumePauseAudioStreams,
+            processConsumerTransportsAudio,
+
+
         }
     }
 
@@ -1842,7 +2048,7 @@ function MediasfuGeneric({ PrejoinPage=WelcomePage, credentials={credentials}, u
 
         return {
 
-            localUIMode : localUIMode.current, // Local UI Development mode
+            localUIMode: localUIMode.current, // Local UI Development mode
 
             //Room Details
             roomName: roomName.current,
@@ -1964,7 +2170,7 @@ function MediasfuGeneric({ PrejoinPage=WelcomePage, credentials={credentials}, u
             chatRequestTime: chatRequestTime.current,
             updateRequestIntervalSeconds: updateRequestIntervalSeconds.current,
             oldSoundIds: oldSoundIds.current,
-            HostLabel: HostLabel.current,
+            hostLabel: hostLabel.current,
             mainScreenFilled: mainScreenFilled.current,
             localStreamScreen: localStreamScreen.current,
             screenAlreadyOn: screenAlreadyOn,
@@ -1996,9 +2202,9 @@ function MediasfuGeneric({ PrejoinPage=WelcomePage, credentials={credentials}, u
             fixedPageLimit: fixedPageLimit.current,
             removeAltGrid: removeAltGrid.current,
             nForReadjust: nForReadjust.current,
-            lastReOrderTime: lastReOrderTime.current,
-            reOrderInterval: reOrderInterval.current,
-            fastReOrderInterval: fastReOrderInterval.current,
+            lastReorderTime: lastReorderTime.current,
+            reorderInterval: reorderInterval.current,
+            fastReorderInterval: fastReorderInterval.current,
             audStreamNames: audStreamNames.current,
             currentUserPage: currentUserPage.current,
             mainHeightWidth: mainHeightWidth,
@@ -2154,6 +2360,24 @@ function MediasfuGeneric({ PrejoinPage=WelcomePage, credentials={credentials}, u
             consumerTransports: consumerTransports.current,
             consumingTransports: consumingTransports.current,
 
+            //polls
+            polls: polls.current,
+            poll: poll.current,
+            isPollModalVisible: isPollModalVisible,
+
+            //breakout rooms
+            breakoutRooms: breakoutRooms.current,
+            currentRoomIndex: currentRoomIndex.current,
+            canStartBreakout: canStartBreakout.current,
+            breakOutRoomStarted: breakOutRoomStarted.current,
+            breakOutRoomEnded: breakOutRoomEnded.current,
+            hostNewRoom: hostNewRoom.current,
+            limitedBreakRoom: limitedBreakRoom.current,
+            mainRoomsLength: mainRoomsLength.current,
+            memberRoom: memberRoom.current,
+            isBreakoutRoomsModalVisible: isBreakoutRoomsModalVisible,
+
+    
             componentSizes: componentSizes.current,
 
             validated: validated,
@@ -2285,7 +2509,7 @@ function MediasfuGeneric({ PrejoinPage=WelcomePage, credentials={credentials}, u
             updateScreenRequestTime,
             updateChatRequestTime,
             updateOldSoundIds,
-            updateHostLabel,
+            updatehostLabel,
             updateMainScreenFilled,
             updateLocalStreamScreen,
             updateScreenAlreadyOn,
@@ -2317,7 +2541,7 @@ function MediasfuGeneric({ PrejoinPage=WelcomePage, credentials={credentials}, u
             updateFixedPageLimit,
             updateRemoveAltGrid,
             updateNForReadjust,
-            updateLastReOrderTime,
+            updateLastReorderTime,
             updateAudStreamNames,
             updateCurrentUserPage,
             updatePrevFacingMode,
@@ -2456,6 +2680,23 @@ function MediasfuGeneric({ PrejoinPage=WelcomePage, credentials={credentials}, u
             updateAudioProducer,
             updateConsumerTransports,
             updateConsumingTransports,
+
+            //polls
+            updatePolls,
+            updatePoll,
+            updateIsPollModalVisible,
+
+            //breakout rooms
+            updateBreakoutRooms,
+            updateCurrentRoomIndex,
+            updateCanStartBreakout,
+            updateBreakOutRoomStarted,
+            updateBreakOutRoomEnded,
+            updateHostNewRoom,
+            updateLimitedBreakRoom,
+            updateMainRoomsLength,
+            updateMemberRoom,
+            updateIsBreakoutRoomsModalVisible,
 
             checkOrientation,
 
@@ -2703,6 +2944,35 @@ function MediasfuGeneric({ PrejoinPage=WelcomePage, credentials={credentials}, u
             },
             show: true,
         },
+
+        { 
+            icon : 'poll',
+            text : 'Poll',
+            action : () => {
+                // Action for the Poll button
+                launchPoll({
+                
+                        updateIsPollModalVisible: updateIsPollModalVisible,
+                        isPollModalVisible: isPollModalVisible,
+                    
+                });
+            },
+            show : true,
+        },
+
+        {
+            icon: 'user-friends',
+            text: 'Breakout Rooms',
+            action: () => {
+                // Action for the Breakout Rooms button
+                launchBreakoutRooms({
+                    updateIsBreakoutRoomsModalVisible: updateIsBreakoutRoomsModalVisible,
+                    isBreakoutRoomsModalVisible: isBreakoutRoomsModalVisible,
+                });
+            },
+            show: islevel.current == '2',
+        },
+
     ]
 
 
@@ -3231,10 +3501,14 @@ function MediasfuGeneric({ PrejoinPage=WelcomePage, credentials={credentials}, u
         ScreenOrientation.addOrientationChangeListener((e) => {
             if ((e.orientationInfo.orientation == 4 || e.orientationInfo.orientation == 3) && (eventType.current == 'webinar' || eventType.current == 'conference')) {
                 const minValue = Math.min(componentSizes.current.otherHeight + componentSizes.current.mainHeight, componentSizes.current.otherWidth + componentSizes.current.mainWidth);
-                setControlHeight(0.12);
+                const currentHeight = Math.min(Dimensions.get('window').height, Dimensions.get('window').width);
+                 // Adaptively set the control height for specific screen sizes
+                 //compute the fraction that give max of 40px to 3 decimal places
+                const fraction = (40 / currentHeight).toFixed(3);
+                updateControlHeight(fraction);
 
             } else {
-                setControlHeight(0.06);
+                updateControlHeight(0.06);
             }
         })
     }, [])
@@ -3291,8 +3565,8 @@ function MediasfuGeneric({ PrejoinPage=WelcomePage, credentials={credentials}, u
     useEffect(() => {
         //set control buttons for event types. Webinar and conference have different and fixed control buttons. 
         //Broadcast and chat have unfixed (floating) control buttons so they need no screen height adjustment
-        setMainHeightWidth(eventType.current == 'webinar' ? 67 : eventType.current == 'broadcast' ? 100 : 0)
-        setControlHeight((eventType.current == 'webinar' || eventType.current == 'conference') ? 0.06 : 0)
+        updateMainHeightWidth(eventType.current == 'webinar' ? 67 : eventType.current == 'broadcast' ? 100 : 0)
+        updateControlHeight((eventType.current == 'webinar' || eventType.current == 'conference') ? 0.06 : 0)
 
     }, []);
 
@@ -3322,10 +3596,21 @@ function MediasfuGeneric({ PrejoinPage=WelcomePage, credentials={credentials}, u
                 }
             }
 
+            if (eventType.current == 'webinar' || eventType.current == 'conference') {
+                const currentHeight = Math.min(Dimensions.get('window').height, Dimensions.get('window').width);
+                 // Adaptively set the control height for specific screen sizes
+                 //compute the fraction that give max of 40px to 3 decimal places
+                const fraction = (40 / currentHeight).toFixed(3);
+                if (controlHeight != fraction){
+                    updateControlHeight(fraction);
+                }
+
+            }
+
             //updates the mini grid view
             await onScreenChanges({ changed: true, parameters: { ...getAllParams(), ...mediaSFUFunctions() } });
             //updates the main grid view
-            await prepopulateUserMedia({ name: HostLabel.current, parameters: { ...getAllParams(), ...mediaSFUFunctions() } });
+            await prepopulateUserMedia({ name: hostLabel.current, parameters: { ...getAllParams(), ...mediaSFUFunctions() } });
         };
 
         const onResize = async () => {
@@ -3346,10 +3631,10 @@ function MediasfuGeneric({ PrejoinPage=WelcomePage, credentials={credentials}, u
         //listen to changes in dimensions and update the main video size accordingly
 
         if (!lock_screen && !shared) {
-            prepopulateUserMedia({ name: HostLabel.current, parameters: { ...getAllParams(), ...mediaSFUFunctions() } })
+            prepopulateUserMedia({ name: hostLabel.current, parameters: { ...getAllParams(), ...mediaSFUFunctions() } })
         } else {
             if (!first_round) {
-                prepopulateUserMedia({ name: HostLabel.current, parameters: { ...getAllParams(), ...mediaSFUFunctions() } })
+                prepopulateUserMedia({ name: hostLabel.current, parameters: { ...getAllParams(), ...mediaSFUFunctions() } })
             }
         }
 
@@ -3465,6 +3750,9 @@ function MediasfuGeneric({ PrejoinPage=WelcomePage, credentials={credentials}, u
         await updateRecordingProgressTime('00:00:00');
         await updateRecordElapsedTime(0);
         await updateShowRecordButtons(false);
+        await updateIsBreakoutRoomsModalVisible(false);
+        await updateIsPollModalVisible(false);
+       
 
         setTimeout(async function () {
             updateValidated(false);
@@ -3480,7 +3768,7 @@ function MediasfuGeneric({ PrejoinPage=WelcomePage, credentials={credentials}, u
 
             socket.current.on('disconnect', async () => {
 
-                await disconnect({ parameters: { showAlert, redirectURL:redirectURL.current, onWeb: Platform.OS == 'web', updateValidated } });
+                await disconnect({ parameters: { showAlert, redirectURL: redirectURL.current, onWeb: Platform.OS == 'web', updateValidated } });
                 if (videoAlreadyOn.current) {
                     await clickVideo({ parameters: { ...getAllParams(), ...mediaSFUFunctions(), MediaStream, MediaStreamTrack, mediaDevices, device: device.current, socket: socket.current, showAlert, checkPermission, streamSuccessVideo, hasCameraPermission, requestPermissionCamera, checkMediaPermission: Platform.OS != 'web' } })
                 }
@@ -3789,6 +4077,36 @@ function MediasfuGeneric({ PrejoinPage=WelcomePage, credentials={credentials}, u
                 });
             });
 
+            socket.current.on('pollUpdated', async (data) => {
+                try {
+                    await pollUpdated({
+                        data,
+                        parameters: {
+                            ...getAllParams(),
+                            ...mediaSFUFunctions(),
+                        }
+                    });
+                } catch (error) {
+                }
+               
+              });
+
+            socket.current.on('breakoutRoomUpdated', async (data) => {
+
+                try {
+                    await breakoutRoomUpdated({
+                        data,
+                        parameters: {
+                            ...getAllParams(),
+                            ...mediaSFUFunctions(),
+                        }
+                    });
+                } catch (error) {
+                    // console.log('error breakoutRoomUpdated', error);
+                }
+
+            });
+
 
             await join_Room({
                 socket: socket.current,
@@ -3809,7 +4127,7 @@ function MediasfuGeneric({ PrejoinPage=WelcomePage, credentials={credentials}, u
                 }
             });
 
-            await prepopulateUserMedia({ name: HostLabel.current, parameters: { ...getAllParams(), ...mediaSFUFunctions() } });
+            await prepopulateUserMedia({ name: hostLabel.current, parameters: { ...getAllParams(), ...mediaSFUFunctions() } });
 
         }
 
@@ -3908,7 +4226,7 @@ function MediasfuGeneric({ PrejoinPage=WelcomePage, credentials={credentials}, u
                             >
 
 
-                                <FlexibleVideo
+<FlexibleVideo
                                     customWidth={componentSizes.current.mainWidth}
                                     customHeight={componentSizes.current.mainHeight}
                                     rows={1}
@@ -3916,6 +4234,7 @@ function MediasfuGeneric({ PrejoinPage=WelcomePage, credentials={credentials}, u
                                     componentsToRender={mainGridStream.current ? mainGridStream.current : []}
                                     showAspect={mainGridStream.current.length > 0}
                                 />
+
 
                                 < ControlButtonsComponentTouch
                                     buttons={controlBroadcastButtons}
@@ -4248,6 +4567,37 @@ function MediasfuGeneric({ PrejoinPage=WelcomePage, credentials={credentials}, u
                 islevel={islevel.current}
                 adminPasscode={adminPasscode.current}
             />
+
+            <PollModal
+                    isPollModalVisible={isPollModalVisible}
+                    onClose={() => setIsPollModalVisible(false)}
+                    parameters={{
+                    ...getAllParams(),
+                    ...mediaSFUFunctions(),
+                    socket: socket.current,
+                    showAlert
+                    }}
+            />
+
+
+
+            <BreakoutRoomsModal backgroundColor="rgba(217, 227, 234, 0.99)" isVisible={isBreakoutRoomsModalVisible} updateIsBreakoutRoomsModalVisible={updateIsBreakoutRoomsModalVisible} onBreakoutRoomsClose={() => updateIsBreakoutRoomsModalVisible(false)}
+                parameters={
+                    {
+                        ...getAllParams(),
+                        ...mediaSFUFunctions(),
+                    }
+                }
+            />
+
+            {/* <ConfigureWhiteboardModal backgroundColor="rgba(217, 227, 234, 0.99)" isVisible={isConfigureWhiteboardModalVisible} updateIsConfigureWhiteboardModalVisible={updateIsConfigureWhiteboardModalVisible} onConfigureWhiteboardClose={() => updateIsConfigureWhiteboardModalVisible(false)}
+                parameters={
+                    {
+                        ...getAllParams(),
+                        ...mediaSFUFunctions(),
+                    }
+                }
+            /> */}
 
 
             <AlertComponent

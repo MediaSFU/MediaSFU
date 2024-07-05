@@ -53,7 +53,7 @@ export const consumerResume = async ({ track, kind, remoteProducerId, params, pa
       defer_receive,
       firstAll,
       remoteScreenStream,
-      HostLabel,
+      hostLabel,
       updateAudioProducer,
       updateVideoProducer,
       updateScreenProducer,
@@ -149,7 +149,7 @@ export const consumerResume = async ({ track, kind, remoteProducerId, params, pa
         if (!mainScreenFilled && participant[0].islevel == '2') {
           updateMainWindow = true;
           updateUpdateMainWindow(updateMainWindow);
-          await prepopulateUserMedia({ name: HostLabel, parameters :{...parameters, audStreamNames,allAudioStreams} });
+          await prepopulateUserMedia({ name: hostLabel, parameters :{...parameters, audStreamNames,allAudioStreams} });
           updateMainWindow = false;
           updateUpdateMainWindow(updateMainWindow);
         }
@@ -220,11 +220,11 @@ export const consumerResume = async ({ track, kind, remoteProducerId, params, pa
         }
 
         if (!lock_screen) {
-          await prepopulateUserMedia({ name: HostLabel, parameters });
+          await prepopulateUserMedia({ name: hostLabel, parameters });
           await reorderStreams({ add: false, screenChanged: true, parameters :{...parameters, remoteScreenStream,allVideoStreams} });
         } else {
           if (!first_round) {
-            await prepopulateUserMedia({ name: HostLabel, parameters: {...parameters, remoteScreenStream,allVideoStreams} });
+            await prepopulateUserMedia({ name: hostLabel, parameters: {...parameters, remoteScreenStream,allVideoStreams} });
             await reorderStreams({ add: false, screenChanged: true, parameters: {...parameters, remoteScreenStream,allVideoStreams} });
           }
         }

@@ -110,7 +110,7 @@ export const initialValuesState = {
     chatRequestTime: 0,
     updateRequestIntervalSeconds: 240,
     oldSoundIds: [],
-    HostLabel: 'Host',
+    hostLabel: 'Host',
     mainScreenFilled: false,
     localStreamScreen: null,
     screenAlreadyOn: false,
@@ -140,9 +140,9 @@ export const initialValuesState = {
     fixedPageLimit: 4,
     removeAltGrid: false,
     nForReadjust: 0,
-    reOrderInterval: 30000,
-    fastReOrderInterval: 10000,
-    lastReOrderTime: 0,
+    reorderInterval: 30000,
+    fastReorderInterval: 10000,
+    lastReorderTime: 0,
     audStreamNames: [],
     currentUserPage: 0,
     isWideScreen: false,
@@ -225,6 +225,21 @@ export const initialValuesState = {
     canPauseResume: false,
     pauseLimit: 0,
     pauseRecordCount: 0,
+
+    polls: [],
+    poll: null,
+
+    
+    breakOutRoomStarted: false,
+    breakOutRoomEnded: false,
+    breakOutRoomLimit: 0,
+    breakoutRooms: [],
+    currentRoomIndex: 0,
+    canStartBreakout: false,
+    hostNewRoom: -1,
+    limitedBreakRoom: false,
+    mainRoomsLength: 0,
+    memberRoom: null,
 
 }
 

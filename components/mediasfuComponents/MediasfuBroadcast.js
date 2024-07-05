@@ -644,7 +644,7 @@ function MediasfuBroadcast({ PrejoinPage=WelcomePage, credentials={}, useLocalUI
     const chatRequestTime = useRef(0); // Chat request time
     const updateRequestIntervalSeconds = useRef(240); // Update request interval in seconds
     const oldSoundIds = useRef([]); // Array of old sound IDs
-    const HostLabel = useRef('Host'); // Host label
+    const hostLabel = useRef('Host'); // Host label
     const mainScreenFilled = useRef(false); // True if the main screen is filled
     const localStreamScreen = useRef(null); // Local stream screen
     const [screenAlreadyOn, setScreenAlreadyOn] = useState(false); // True if the screen is already on
@@ -676,9 +676,9 @@ function MediasfuBroadcast({ PrejoinPage=WelcomePage, credentials={}, useLocalUI
     const fixedPageLimit = useRef(4); // Fixed page limit for pagination
     const removeAltGrid = useRef(false); // True if the alt grid should be removed
     const nForReadjust = useRef(0); // Number of times for readjusting the recording
-    const reOrderInterval = useRef(30000); // Reorder interval
-    const fastReOrderInterval = useRef(10000); // Fast reorder interval
-    const lastReOrderTime = useRef(0); // Last reorder time
+    const reorderInterval = useRef(30000); // Reorder interval
+    const fastReorderInterval = useRef(10000); // Fast reorder interval
+    const lastReorderTime = useRef(0); // Last reorder time
     const audStreamNames = useRef([]); // Array of audio stream names
     const currentUserPage = useRef(0); // Current user page
     const [mainHeightWidth, setMainHeightWidth] = useState(eventType.current == 'webinar' ? 67 : eventType.current == 'broadcast' ? 100 : 0); // Main height and width
@@ -918,8 +918,8 @@ function MediasfuBroadcast({ PrejoinPage=WelcomePage, credentials={}, useLocalUI
         oldSoundIds.current = value;
     }
 
-    const updateHostLabel = (value) => {
-        HostLabel.current = value;
+    const updatehostLabel = (value) => {
+        hostLabel.current = value;
     }
 
     const updateMainScreenFilled = (value) => {
@@ -1046,8 +1046,8 @@ function MediasfuBroadcast({ PrejoinPage=WelcomePage, credentials={}, useLocalUI
         nForReadjust.current = value;
     }
 
-    const updateLastReOrderTime = (value) => {
-        lastReOrderTime.current = value;
+    const updateLastReorderTime = (value) => {
+        lastReorderTime.current = value;
     }
 
     const updateAudStreamNames = (value) => {
@@ -1921,7 +1921,7 @@ function MediasfuBroadcast({ PrejoinPage=WelcomePage, credentials={}, useLocalUI
             chatRequestTime: chatRequestTime.current,
             updateRequestIntervalSeconds: updateRequestIntervalSeconds.current,
             oldSoundIds: oldSoundIds.current,
-            HostLabel: HostLabel.current,
+            hostLabel: hostLabel.current,
             mainScreenFilled: mainScreenFilled.current,
             localStreamScreen: localStreamScreen.current,
             screenAlreadyOn: screenAlreadyOn,
@@ -1953,9 +1953,9 @@ function MediasfuBroadcast({ PrejoinPage=WelcomePage, credentials={}, useLocalUI
             fixedPageLimit: fixedPageLimit.current,
             removeAltGrid: removeAltGrid.current,
             nForReadjust: nForReadjust.current,
-            lastReOrderTime: lastReOrderTime.current,
-            reOrderInterval: reOrderInterval.current,
-            fastReOrderInterval: fastReOrderInterval.current,
+            lastReorderTime: lastReorderTime.current,
+            reorderInterval: reorderInterval.current,
+            fastReorderInterval: fastReorderInterval.current,
             audStreamNames: audStreamNames.current,
             currentUserPage: currentUserPage.current,
             mainHeightWidth: mainHeightWidth,
@@ -2242,7 +2242,7 @@ function MediasfuBroadcast({ PrejoinPage=WelcomePage, credentials={}, useLocalUI
             updateScreenRequestTime,
             updateChatRequestTime,
             updateOldSoundIds,
-            updateHostLabel,
+            updatehostLabel,
             updateMainScreenFilled,
             updateLocalStreamScreen,
             updateScreenAlreadyOn,
@@ -2274,7 +2274,7 @@ function MediasfuBroadcast({ PrejoinPage=WelcomePage, credentials={}, useLocalUI
             updateFixedPageLimit,
             updateRemoveAltGrid,
             updateNForReadjust,
-            updateLastReOrderTime,
+            updateLastReorderTime,
             updateAudStreamNames,
             updateCurrentUserPage,
             updatePrevFacingMode,
@@ -2867,7 +2867,7 @@ function MediasfuBroadcast({ PrejoinPage=WelcomePage, credentials={}, useLocalUI
             //updates the mini grid view
             await onScreenChanges({ changed: true, parameters: { ...getAllParams(), ...mediaSFUFunctions() } });
             //updates the main grid view
-            await prepopulateUserMedia({ name: HostLabel.current, parameters: { ...getAllParams(), ...mediaSFUFunctions() } });
+            await prepopulateUserMedia({ name: hostLabel.current, parameters: { ...getAllParams(), ...mediaSFUFunctions() } });
         };
 
         const onResize = async () => {
@@ -2888,10 +2888,10 @@ function MediasfuBroadcast({ PrejoinPage=WelcomePage, credentials={}, useLocalUI
         //listen to changes in dimensions and update the main video size accordingly
 
         if (!lock_screen && !shared) {
-            prepopulateUserMedia({ name: HostLabel.current, parameters: { ...getAllParams(), ...mediaSFUFunctions() } })
+            prepopulateUserMedia({ name: hostLabel.current, parameters: { ...getAllParams(), ...mediaSFUFunctions() } })
         } else {
             if (!first_round) {
-                prepopulateUserMedia({ name: HostLabel.current, parameters: { ...getAllParams(), ...mediaSFUFunctions() } })
+                prepopulateUserMedia({ name: hostLabel.current, parameters: { ...getAllParams(), ...mediaSFUFunctions() } })
             }
         }
 
@@ -3280,7 +3280,7 @@ function MediasfuBroadcast({ PrejoinPage=WelcomePage, credentials={}, useLocalUI
                 }
             });
 
-            await prepopulateUserMedia({ name: HostLabel.current, parameters: { ...getAllParams(), ...mediaSFUFunctions() } });
+            await prepopulateUserMedia({ name: hostLabel.current, parameters: { ...getAllParams(), ...mediaSFUFunctions() } });
 
         }
 

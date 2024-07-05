@@ -363,27 +363,29 @@ const PreJoinPage = ({ parameters, credentials = user_credentials }) => {
                     <>
                         <TextInput
                             placeholder="Display Name"
-                            value={name ? name : ''}
+                            value={name}
                             onChangeText={setName}
                             style={styles.inputField}
                         />
                         <TextInput
                             placeholder="Duration (minutes)"
-                            value={duration ? duration : ''}
+                            value={duration}
                             onChangeText={setDuration}
                             style={styles.inputField}
+                            inputMode="numeric"
                         />
                         <TextInput
                             placeholder="Event Type"
-                            value={eventType ? eventType : ''}
+                            value={eventType}
                             onChangeText={setEventType}
                             style={styles.inputField}
                         />
                         <TextInput
                             placeholder="Room Capacity"
-                            value={capacity ? capacity : ''}
+                            value={capacity}
                             onChangeText={setCapacity}
                             style={styles.inputField}
+                            inputMode="numeric"
                         />
                         <Pressable onPress={handleCreateRoom} style={styles.actionButton}>
                             <Text style={{ color: 'white' }}>Create Room</Text>
@@ -393,23 +395,22 @@ const PreJoinPage = ({ parameters, credentials = user_credentials }) => {
                     <>
                         <TextInput
                             placeholder="Display Name"
-                            value={name ? name : ''}
+                            value={name}
                             onChangeText={setName}
                             style={styles.inputField}
                         />
                         <TextInput
                             placeholder="Event ID"
-                            value={eventID ? eventID : ''}
+                            value={eventID}
                             onChangeText={setEventID}
                             style={styles.inputField}
                         />
-
                         <Pressable onPress={handleJoinRoom} style={styles.actionButton}>
                             <Text style={{ color: 'white' }}>Join Room</Text>
                         </Pressable>
                     </>
                 )}
-                {error && <Text style={styles.error}>{error}</Text>}
+                {error ? <Text style={styles.error}>{error}</Text> : null}
             </View>
             <View style={styles.orContainer}>
                 <Text style={styles.orText}>OR</Text>
