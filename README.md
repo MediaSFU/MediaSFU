@@ -37,28 +37,51 @@ If you're here for the MediaSFU React Native project, you're in the right place.
 
 ### 🛠️ Getting Started
 
-1. **Cloning the Repository:**
-
+1. **Adding the Project as a Dependency:**
+    In your React Native project, add MediaSFU as a dependency by adding the following line to your `package.json` file:
     ```bash
-    git clone https://github.com/MediaSFU/MediaSFU.git
-    cd MediaSFU
+    "dependencies": {
+        "mediasfu": "github:MediaSFU/MediaSFU"
+    }
     ```
 
-2. **Installing Dependencies:**
+2. **Installing the Dependency:**
 
-    Ensure you have Node.js and npm installed. Then, install project dependencies.
+    Install the MediaSFU dependency by running the following command:
 
     ```bash
     npm install
     ```
 
-3. **Running the Project:**
+3. **Import the relevant components:**
 
-    Start the Expo development server to run the project locally.
+    Follow the [React SDK documentation](https://github.com/MediaSFU/MediaSFU-ReactJS) to import the necessary components and set up your project.
 
-    ```bash
-    expo start
+    For example, to import the `MediasfuGeneric` and `PreJoinPage` components, use the following code:
+    
+    ```javascript
+    import {MediasfuGeneric} from 'mediasfu';
+    import { PreJoinPage } from 'mediasfu';
+
+    const credentials = {apiUserName: "your_api_username", apiKey: "your_api_key"};
+
+    export default function App() {
+    return (
+    <MediasfuGeneric PrejoinPage={PreJoinPage} credentials={credentials} />
+        
+    );
+    }
+    export default App;
     ```
+
+4. **Running the Project:**
+    
+      Run your project using the following command:
+  
+      ```javascript
+      npm start
+      ```
+
 ## ❓ Need Help?
 
 If you require assistance or have questions specific to the MediaSFU React Native project, you can refer to our [Developer Documentation](https://www.mediasfu.com/developers) or visit our [Community Forums](https://www.mediasfu.com/forums).
@@ -69,11 +92,7 @@ For detailed documentation, refer to the [ReactJS SDK documentation](https://git
 
 This project is licensed under the [MIT License](LICENSE).
 
-The MediaSFU project is an Expo Managed React Native application with configurations for web, iOS, and Android. We've addressed compatibility issues, including different React Native WebRTC support for web and mobile platforms.
-
-### 🚀 Building Your App
-
-To build your app for deployment, follow the Expo guide using the EAS client. Check out the [Expo EAS documentation](https://docs.expo.dev/build/introduction/) for detailed instructions.
+The MediaSFU project has configurations for web, iOS, and Android. We've addressed compatibility issues, including different React Native WebRTC support for web and mobile platforms.
 
 ---
 
