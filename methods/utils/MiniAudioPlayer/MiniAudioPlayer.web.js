@@ -85,6 +85,8 @@ const MiniAudioPlayer = ({
             const source = audioContext.createMediaStreamSource(stream);
             source.connect(analyser);
 
+            let consLow = false;
+
             const intervalId = setInterval(() => {
                 analyser.getByteTimeDomainData(dataArray);
                 let averageLoudness = Array.from(dataArray).reduce((sum, value) => sum + value, 0) / bufferLength;
@@ -111,13 +113,13 @@ const MiniAudioPlayer = ({
 
                 let audioActiveInRoom = true;
                 if (participant) {
-                  if (breakOutRoomStarted && !breakOutRoomEnded) {
-                    //participant name must be in limitedBreakRoom
-                    if (!limitedBreakRoom.map(obj => obj.name).includes(participant.name)) {
-                      audioActiveInRoom = false;
-                      averageLoudness = 127;
+                    if (breakOutRoomStarted && !breakOutRoomEnded) {
+                        //participant name must be in limitedBreakRoom
+                        if (!limitedBreakRoom.map(obj => obj.name).includes(participant.name)) {
+                            audioActiveInRoom = false;
+                            averageLoudness = 127;
+                        }
                     }
-                  }
                 }
 
                 if (meetingDisplayType != 'video') {
@@ -171,37 +173,41 @@ const MiniAudioPlayer = ({
 
                             if (!activeSounds.includes(participant.name)) {
                                 activeSounds.push(participant.name);
-                                //reupdate
-                            }
+                                consLow = false;
 
-                            if ((shareScreenStarted || shared) && !participant.videoID) {
-                            } else {
-                                reUpdateInter({
-                                    name: participant.name,
-                                    add: true,
-                                    average: averageLoudness,
-                                    parameters: parameters
-                                })
+                                if ((shareScreenStarted || shared) && !participant.videoID) {
+                                } else {
+                                    reUpdateInter({
+                                        name: participant.name,
+                                        add: true,
+                                        average: averageLoudness,
+                                        parameters: parameters
+                                    })
 
+                                }
                             }
 
                         } else {
 
                             //remove from activeSounds array, the name of the participant, IF it is there
                             //remove the name and averageLoudness from the array audioDecibels if there
-                            if (activeSounds.includes(participant.name)) {
+                            if (activeSounds.includes(participant.name) && consLow) {
                                 activeSounds.splice(activeSounds.indexOf(participant.name), 1);
                                 //reupdate
-                            }
-                            if ((shareScreenStarted || shared) && !participant.videoID) {
-                            } else {
-                                reUpdateInter({
-                                    name: participant.name,
-                                    average: averageLoudness,
-                                    parameters: parameters
-                                })
 
+                                if ((shareScreenStarted || shared) && !participant.videoID) {
+                                } else {
+                                    reUpdateInter({
+                                        name: participant.name,
+                                        average: averageLoudness,
+                                        parameters: parameters
+                                    })
+
+                                }
+                            } else {
+                                consLow = true;
                             }
+
                         }
 
                     } else {
@@ -259,7 +265,7 @@ const MiniAudioPlayer = ({
 
                 }
 
-            }, 1000);
+            }, 2000);
 
 
             return () => {

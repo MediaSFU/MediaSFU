@@ -83,8 +83,10 @@ const MiniAudioPlayer = ({
             // const bufferLength = analyser.frequencyBinCount;
             // const dataArray = new Uint8Array(bufferLength);
 
-            // const source = audioContext.createMediaStreamSource(stream);
-            // source.connect(analyser);
+            const source = audioContext.createMediaStreamSource(stream);
+            source.connect(analyser);
+
+            let consLow = false;
 
             const intervalId = setInterval(() => {
                 // analyser.getByteTimeDomainData(dataArray);
@@ -109,7 +111,6 @@ const MiniAudioPlayer = ({
                 } = parameters;
 
                 let participant = participants.find(obj => obj.audioID === remoteProducerId);
-
 
                 let audioActiveInRoom = true;
                 if (participant) {
@@ -173,8 +174,7 @@ const MiniAudioPlayer = ({
 
                             if (!activeSounds.includes(participant.name)) {
                                 activeSounds.push(participant.name);
-                                //reupdate
-                            }
+                                consLow = false;
 
                             if ((shareScreenStarted || shared) && !participant.videoID) {
                             } else {
@@ -185,16 +185,17 @@ const MiniAudioPlayer = ({
                                     parameters: parameters
                                 })
 
+                                }
                             }
 
                         } else {
 
                             //remove from activeSounds array, the name of the participant, IF it is there
                             //remove the name and averageLoudness from the array audioDecibels if there
-                            if (activeSounds.includes(participant.name)) {
+                            if (activeSounds.includes(participant.name) && consLow) {
                                 activeSounds.splice(activeSounds.indexOf(participant.name), 1);
                                 //reupdate
-                            }
+
                             if ((shareScreenStarted || shared) && !participant.videoID) {
                             } else {
                                 reUpdateInter({
@@ -204,6 +205,10 @@ const MiniAudioPlayer = ({
                                 })
 
                             }
+                            } else {
+                                consLow = true;
+                            }
+
                         }
 
                     } else {
@@ -261,7 +266,7 @@ const MiniAudioPlayer = ({
 
                 }
 
-            }, 1000);
+            }, 2000);
 
 
             return () => {
