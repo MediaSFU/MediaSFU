@@ -51,7 +51,7 @@ import { launchRequests } from './methods/requestsMethods/launchRequests';
 import { launchParticipants } from './methods/participantsMethods/launchParticipants';
 import { launchMessages } from './methods/messageMethods/launchMessages';
 import { launchConfirmExit } from './methods/exitMethods/launchConfirmExit';
-import { launchPoll } from './methods/pollsMethods/launchPoll';
+import { launchPoll } from './methods/pollsMethods/launchPoll'; 
 import { launchBreakoutRooms } from './methods/breakoutRoomsMethods/launchBreakoutRooms';
 
 // Import the platform-specific WebRTC module (options are for ios, android, web)
@@ -203,7 +203,9 @@ export {
 
     MeetingProgressTimer, MiniAudio, MiniCard, AudioCard, VideoCard, CardVideoDisplay, MiniCardAudio, MiniAudioPlayer,
     
+    resumePauseAudioStreams, processConsumerTransportsAudio,
     pollUpdated, handleCreatePoll, handleVotePoll, handleEndPoll, breakoutRoomUpdated, resumePauseAudioStreams, processConsumerTransportsAudio,
     
+    launchPoll, launchBreakoutRooms,
     PollModal, BreakoutRoomsModal
 };
