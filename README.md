@@ -3,7 +3,6 @@
 <p align="center">
   <img src="https://www.mediasfu.com/logo192.png" width="100" alt="MediaSFU Logo">
 </p>
-
 <p align="center">
   <a href="https://twitter.com/media_sfu">
     <img src="https://img.icons8.com/color/48/000000/twitter--v1.png" alt="Twitter" style="margin-right: 10px;">
@@ -12,16 +11,15 @@
     <img src="https://img.icons8.com/color/48/000000/communication--v1.png" alt="Community Forum" style="margin-right: 10px;">
   </a>
   <a href="https://github.com/MediaSFU">
-    <img src="https://img.icons8.com/fluent/48/000000/github.png" alt="Github" style="margin-right: 10px;">
+    <img src="https://img.icons8.com/fluent/48/000000/github.png" alt="GitHub" style="margin-right: 10px;">
   </a>
   <a href="https://www.mediasfu.com/">
     <img src="https://img.icons8.com/color/48/000000/domain--v1.png" alt="Website" style="margin-right: 10px;">
   </a>
   <a href="https://www.youtube.com/channel/UCELghZRPKMgjih5qrmXLtqw">
-    <img src="https://img.icons8.com/color/48/000000/youtube--v1.png" alt="Youtube" style="margin-right: 10px;">
+    <img src="https://img.icons8.com/color/48/000000/youtube--v1.png" alt="YouTube" style="margin-right: 10px;">
   </a>
 </p>
-
 
 MediaSFU offers a cutting-edge streaming experience that empowers users to customize their recordings and engage their audience with high-quality streams. Whether you're a content creator, educator, or business professional, MediaSFU provides the tools you need to elevate your streaming game.
 
@@ -30,69 +28,6 @@ MediaSFU offers a cutting-edge streaming experience that empowers users to custo
 ## 🚀 About MediaSFU
 
 [MediaSFU](https://www.mediasfu.com) is a comprehensive streaming platform designed to revolutionize your streaming experience. With advanced features like unlimited pausing and resuming and lightning-fast 300ms latency, MediaSFU ensures a seamless and immersive viewing experience for both creators and viewers.
-
-## 📱 MediaSFU Project (React Native)
-
-If you're here for the MediaSFU React Native project, you're in the right place. Follow the instructions below to get started with the project (For detailed documentation, refer to the [React SDK documentation](https://github.com/MediaSFU/MediaSFU-ReactJS)):
-
-### 🛠️ Getting Started
-
-1. **Adding the Project as a Dependency:**
-    In your React Native project, add MediaSFU as a dependency by adding the following line to your `package.json` file:
-    ```bash
-    "dependencies": {
-        "mediasfu": "github:MediaSFU/MediaSFU"
-    }
-    ```
-
-2. **Installing the Dependency:**
-
-    Install the MediaSFU dependency by running the following command:
-
-    ```bash
-    npm install
-    ```
-
-3. **Import the relevant components:**
-
-    Follow the [React SDK documentation](https://github.com/MediaSFU/MediaSFU-ReactJS) to import the necessary components and set up your project.
-
-    For example, to import the `MediasfuGeneric` and `PreJoinPage` components, use the following code:
-    
-    ```javascript
-    import {MediasfuGeneric} from 'mediasfu';
-    import { PreJoinPage } from 'mediasfu';
-
-    const credentials = {apiUserName: "your_api_username", apiKey: "your_api_key"};
-
-    export default function App() {
-    return (
-    <MediasfuGeneric PrejoinPage={PreJoinPage} credentials={credentials} />
-        
-    );
-    }
-    export default App;
-    ```
-
-4. **Running the Project:**
-    
-      Run your project using the following command:
-  
-      ```javascript
-      npm start
-      ```
-
-## ❓ Need Help?
-
-If you require assistance or have questions specific to the MediaSFU React Native project, you can refer to our [Developer Documentation](https://www.mediasfu.com/developers) or visit our [Community Forums](https://www.mediasfu.com/forums).
-
-For detailed documentation, refer to the [ReactJS SDK documentation](https://github.com/MediaSFU/MediaSFU-ReactJS).
-
-## 📄 License
-
-This project is licensed under the [MIT License](LICENSE).
-
-The MediaSFU project has configurations for web, iOS, and Android. We've addressed compatibility issues, including different React Native WebRTC support for web and mobile platforms.
 
 ---
 
@@ -116,28 +51,85 @@ As a CPaaS (Communication Platform as a Service) oriented platform, MediaSFU emp
 
 ---
 
+## 🌟 MediaSFU Features Overview
+
+MediaSFU's React SDK comes with a host of powerful features out of the box:
+
+1. **Screen Sharing with Annotation Support:** *(Web Only)* Share your screen with participants and annotate in real-time for enhanced presentations and collaborations.
+2. **Collaborative Whiteboards:** *(Web Only)* Create and share whiteboards for real-time collaborative drawing and brainstorming sessions.
+3. **Breakout Rooms:** Create multiple sub-meetings within a single session to enhance collaboration and focus.
+4. **Pagination:** Efficiently handle large participant lists with seamless pagination.
+5. **Polls:** Conduct real-time polls to gather instant feedback from participants.
+6. **Media Access Requests Management:** Manage media access requests with ease to ensure smooth operations.
+7. **Video Effects:** Apply various video effects, including virtual backgrounds, to enhance the visual experience.
+8. **Chat (Direct & Group):** Facilitate communication with direct and group chat options.
+9. **Cloud Recording (track-based):** Customize recordings with track-based options, including watermarks, name tags, background colors, and more.
+10. **Managed Events:** Manage events with features to handle abandoned and inactive participants, as well as enforce time and capacity limits.
+
+**Note:** Features marked with *(Web Only)* are currently available only on the web SDKs and are yet to be supported or implemented in our mobile SDKs. We are continuously working to expand these features across all platforms.
+
+---
+
 ## 🛠️ MediaSFU SDKs
 
 At MediaSFU, we provide a range of SDKs tailored to different platforms, allowing developers to seamlessly integrate our streaming capabilities into their applications. Our SDKs are full-fledged applications written in various languages, making it easy to incorporate MediaSFU functionalities into your projects.
 
-### 📱 [React Native SDK](https://github.com/MediaSFU/MediaSFU)
-Our React Native SDK enables developers to integrate MediaSFU streaming features into their mobile applications with ease. Build immersive streaming experiences for iOS and Android platforms effortlessly.
+### 📱 [React Native Expo SDK](https://www.npmjs.com/package/mediasfu-reactnative-expo)
 
-### 🌟 [Flutter SDK](https://github.com/MediaSFU/MediaSFU_SDK_Flutter)
+Our React Native Expo SDK enables developers to integrate MediaSFU streaming features into their Expo-based mobile applications with ease. Build immersive streaming experiences for iOS and Android platforms effortlessly.
+
+- **GitHub:** [MediaSFU/mediasfu-reactnative-expo](https://github.com/MediaSFU/MediaSFU-ReactNative-Expo)
+- **npm:** [mediasfu-reactnative-expo](https://www.npmjs.com/package/mediasfu-reactnative-expo)
+
+### 📱 [React Native CLI SDK](https://www.npmjs.com/package/mediasfu-reactnative)
+
+For developers using the React Native CLI, our React Native CLI SDK offers robust streaming capabilities. Integrate MediaSFU seamlessly into your native React Native projects and leverage advanced streaming functionalities.
+
+- **GitHub:** [MediaSFU/mediasfu-reactnative](https://github.com/MediaSFU/MediaSFU-ReactNative)
+- **npm:** [mediasfu-reactnative](https://www.npmjs.com/package/mediasfu-reactnative)
+
+### 🌟 [Flutter SDK](https://pub.dev/packages/mediasfu_sdk)
+
 Developers can leverage our Flutter SDK to create high-performance streaming applications with rich user interfaces. Build stunning cross-platform streaming apps with ease using Flutter and MediaSFU.
 
+- **GitHub:** [MediaSFU/MediaSFU_SDK_Flutter](https://github.com/MediaSFU/MediaSFU_SDK_Flutter)
+- **pub.dev:** [mediasfu_sdk](https://pub.dev/packages/mediasfu_sdk)
+
 ### 🌐 [React JS SDK](https://github.com/MediaSFU/MediaSFU-ReactJS)
+
 Integrate MediaSFU's powerful streaming capabilities into your web applications using our React JS SDK. Create engaging live streaming experiences for your web users seamlessly.
 
-### 🔜 Vue and Angular SDKs (Coming Soon)
+- **GitHub:** [MediaSFU/MediaSFU-ReactJS](https://github.com/MediaSFU/MediaSFU-ReactJS)
+- **npm:** [mediasfu-reactjs](https://www.npmjs.com/package/mediasfu-reactjs)
 
-Scheduled for release in June 2024, our Vue and Angular SDKs will expand our support for web developers, offering seamless integration of MediaSFU streaming features into Vue.js and Angular applications.
+### 🅰️ [Angular SDK](https://www.npmjs.com/package/mediasfu-angular)
+
+Our Angular SDK is now available! Easily incorporate MediaSFU streaming features into your Angular applications, enhancing your projects with high-quality live streaming functionalities.
+
+- **GitHub:** [MediaSFU/MediaSFU-Angular](https://github.com/MediaSFU/MediaSFU-Angular)
+- **npm:** [mediasfu-angular](https://www.npmjs.com/package/mediasfu-angular)
+
+### 🌸 [Vue SDK](https://www.npmjs.com/package/mediasfu-vue-sdk) *(Coming December 2024)*
+
+Scheduled for release in December 2024, our Vue SDK will allow developers to integrate MediaSFU streaming features into Vue.js applications, expanding our support for the vibrant Vue community.
+
+- **npm:** *(Coming December 2024)*
+
+---
+
+## 🛠️ MediaSFU Quick Start Apps
+
+For a streamlined setup experience, explore our **Quickstart Monorepo**:
+
+- **Quickstart Monorepo:** [MediaSFU/MediaSFU-QuickStart-Apps](https://github.com/MediaSFU/MediaSFU-QuickStart-Apps)
+
+This repository contains preconfigured applications and step-by-step guides to help you get up and running with MediaSFU SDKs swiftly.
 
 ---
 
 ## 🖼️ Embedding MediaSFU Prebuilt UI
 
-Developers can easily embed our main Prebuilt UI (pure JS) into their applications, regardless of the platform they're developing for. Our Prebuilt UI is unbranded and can be seamlessly integrated into existing apps by following the guide on [Embedding MediaSFU Prebuilt UI](https://www.mediasfu.com/prebuilt).
+All our SDKs are clones of the MediaSFU Prebuilt UI, providing a consistent and customizable interface across different platforms. For those seeking a quick deployment solution, you can easily embed the MediaSFU Prebuilt UI directly into your applications.
 
 ### Getting Started
 
@@ -161,4 +153,46 @@ Developers can easily embed our main Prebuilt UI (pure JS) into their applicatio
 
 ---
 
+## 📚 Documentation
 
+For detailed instructions on setting up and using our SDKs, refer to the respective GitHub repositories and npm/pub.dev pages linked above. Each SDK comes with comprehensive guides and examples to help you get started quickly.
+
+- [React Native Expo SDK Documentation](https://github.com/MediaSFU/mediasfu-reactnative-expo)
+- [React Native CLI SDK Documentation](https://github.com/MediaSFU/mediasfu-reactnative)
+- [Flutter SDK Documentation](https://github.com/MediaSFU/MediaSFU_SDK_Flutter)
+- [React JS SDK Documentation](https://github.com/MediaSFU/MediaSFU-ReactJS)
+- [Angular SDK Documentation](https://github.com/MediaSFU/MediaSFU-Angular)
+- [Vue SDK Documentation](https://github.com/MediaSFU/MediaSFU-Vue) *(Coming December 2024)*
+
+For a streamlined setup experience, explore our **Quickstart Monorepo**:
+
+- **Quickstart Monorepo:** [MediaSFU/MediaSFU-QuickStart-Apps](https://github.com/MediaSFU/MediaSFU-QuickStart-Apps)
+
+This repository contains preconfigured applications and step-by-step guides to help you get up and running with MediaSFU SDKs swiftly.
+
+---
+
+## 💬 Community & Support
+
+Join our community to stay updated with the latest features, get support, and share your experiences.
+
+- **Twitter:** [@media_sfu](https://twitter.com/media_sfu)
+- **Community Forum:** [forums.mediasfu.com](https://www.mediasfu.com/forums)
+- **GitHub:** [MediaSFU on GitHub](https://github.com/MediaSFU)
+- **YouTube:** [MediaSFU YouTube Channel](https://www.youtube.com/channel/UCELghZRPKMgjih5qrmXLtqw)
+
+If you encounter any issues or have suggestions, feel free to reach out through our [GitHub Issues](https://github.com/MediaSFU/MediaSFU/issues) or join the conversation on our community forum.
+
+---
+
+## 📈 Stay Updated
+
+Follow us on our social channels and subscribe to our newsletter to receive the latest updates, tutorials, and announcements directly to your inbox.
+
+- **Website:** [www.mediasfu.com](https://www.mediasfu.com/)
+- **Twitter:** [@media_sfu](https://twitter.com/media_sfu)
+- **YouTube:** [MediaSFU YouTube Channel](https://www.youtube.com/channel/UCELghZRPKMgjih5qrmXLtqw)
+
+Thank you for choosing MediaSFU! We look forward to empowering your streaming experiences.
+
+---
