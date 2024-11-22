@@ -31,6 +31,10 @@ MediaSFU offers a cutting-edge streaming experience that empowers users to custo
 
 ---
 
+
+https://github.com/user-attachments/assets/310cb87c-dade-445d-aee7-dea1889d6dc4
+
+
 ## 🌟 What Sets Us Apart
 
 ### 🌐 Highly Scalable Rooms
