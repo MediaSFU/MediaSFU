@@ -55,6 +55,53 @@ As a CPaaS (Communication Platform as a Service) oriented platform, MediaSFU emp
 
 ---
 
+
+## 🎉 What's New?  
+
+### **📚 SpacesTek – The Official MediaSFU Tutorial App**
+Learn **step-by-step** how to integrate MediaSFU into your custom UI with **SpacesTek**.  
+
+🔹 **Start Simple** – Set up the core UI.  
+🔹 **Integrate Real-Time Video/Audio** – Add MediaSFU-powered communication.  
+🔹 **Go Advanced** – Extend with AI-driven capabilities.  
+
+📌 **Get Started:**  
+- [SpacesTek Initial](https://github.com/MediaSFU/SpacesTekInitial) – Base UI setup  
+- [SpacesTek Final](https://github.com/MediaSFU/SpacesTekFinal) – Full MediaSFU integration  
+- [SpacesTek Advanced](https://github.com/MediaSFU/SpacesTekAdvanced) – AI-powered expansion  
+
+🎥 **Video tutorials coming soon!**  
+
+---
+
+### **🤖 AI Voice & Vision Pipelines – Real-Time Agents Now Live!**  
+MediaSFU now supports **AI-driven real-time voice and vision agents** powered by **data buffers**.  
+
+✅ **Deploy Voice Pipelines:**  
+- **STT (Speech-to-Text)** – Convert speech into text.  
+- **LLMs (ChatGPT, DeepSeek, Claude, Gemini, and more)** – Process and generate responses.  
+- **TTS (Text-to-Speech)** – Convert responses into speech.  
+
+✅ **Add Vision Pipelines:**  
+- **Real-time image/frame analysis**  
+- **Integrate AI-powered insights into video streams**  
+
+✅ **Fully customizable & real-time AI processing**  
+
+💰 **Industry-Low Pricing**  
+- 🎙️ **Audio:** $0.1 per 1,000 mins  
+- 📸 **Vision:** $0.375 per 1,000 mins  
+- 🔥 **Up to 40% discounts** for high-volume users  
+
+🚀 **Try it Now:**  
+- [Test Agents Live](https://agents.mediasfu.com)  
+- [Advanced Configurations](https://agents.mediasfu.com/advanced)  
+
+📖 **Explore the Full Guide:** [MediaSFU AI Pipelines](https://mediasfu.com/agents)  
+🔧 **Get Started in 5 Minutes with Our SDKs:** [GitHub SDKs](https://github.com/MediaSFU/Agents)  
+
+---
+
 ## 🌟 MediaSFU Features Overview
 
 MediaSFU's React SDK comes with a host of powerful features out of the box:
@@ -113,11 +160,11 @@ Our Angular SDK is now available! Easily incorporate MediaSFU streaming features
 - **GitHub:** [MediaSFU/MediaSFU-Angular](https://github.com/MediaSFU/MediaSFU-Angular)
 - **npm:** [mediasfu-angular](https://www.npmjs.com/package/mediasfu-angular)
 
-### 🌸 [Vue SDK](https://www.npmjs.com/package/mediasfu-vue-sdk) *(Coming December 2024)*
+### 🌸 [Vue SDK](https://www.npmjs.com/package/mediasfu-vue-sdk) *(Coming March 2025)*
 
-Scheduled for release in December 2024, our Vue SDK will allow developers to integrate MediaSFU streaming features into Vue.js applications, expanding our support for the vibrant Vue community.
+Scheduled for release in March 2025, our Vue SDK will allow developers to integrate MediaSFU streaming features into Vue.js applications, expanding our support for the vibrant Vue community.
 
-- **npm:** *(Coming December 2024)*
+- **npm:** *(Coming March 2025)*
 
 ---
 
@@ -166,7 +213,7 @@ For detailed instructions on setting up and using our SDKs, refer to the respect
 - [Flutter SDK Documentation](https://github.com/MediaSFU/MediaSFU_SDK_Flutter)
 - [React JS SDK Documentation](https://github.com/MediaSFU/MediaSFU-ReactJS)
 - [Angular SDK Documentation](https://github.com/MediaSFU/MediaSFU-Angular)
-- [Vue SDK Documentation](https://github.com/MediaSFU/MediaSFU-Vue) *(Coming December 2024)*
+- [Vue SDK Documentation](https://github.com/MediaSFU/MediaSFU-Vue) *(Coming March 2025)*
 
 For a streamlined setup experience, explore our **Quickstart Monorepo**:
 
