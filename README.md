@@ -1,25 +1,35 @@
-# Welcome to MediaSFU
+# MediaSFU — Real‑time Telephony, Video, and AI Agents
 
-<p align="center">
-  <img src="https://www.mediasfu.com/logo192.png" width="100" alt="MediaSFU Logo">
-</p>
-<p align="center">
-  <a href="https://twitter.com/media_sfu">
-    <img src="https://img.icons8.com/color/48/000000/twitter--v1.png" alt="Twitter" style="margin-right: 10px;">
-  </a>
-  <a href="https://www.mediasfu.com/forums">
-    <img src="https://img.icons8.com/color/48/000000/communication--v1.png" alt="Community Forum" style="margin-right: 10px;">
-  </a>
-  <a href="https://github.com/MediaSFU">
-    <img src="https://img.icons8.com/fluent/48/000000/github.png" alt="GitHub" style="margin-right: 10px;">
-  </a>
-  <a href="https://www.mediasfu.com/">
-    <img src="https://img.icons8.com/color/48/000000/domain--v1.png" alt="Website" style="margin-right: 10px;">
-  </a>
-  <a href="https://www.youtube.com/channel/UCELghZRPKMgjih5qrmXLtqw">
-    <img src="https://img.icons8.com/color/48/000000/youtube--v1.png" alt="YouTube" style="margin-right: 10px;">
-  </a>
-</p>
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![MediaSFU Platform](https://img.shields.io/badge/Platform-MediaSFU-blue)](https://mediasfu.com)
+[![Flutter](https://img.shields.io/badge/Flutter-02569B?style=flat&logo=flutter&logoColor=white)](https://flutter.dev)
+[![React](https://img.shields.io/badge/React-20232A?style=flat&logo=react&logoColor=61DAFB)](https://reactjs.org)
+[![React Native](https://img.shields.io/badge/React_Native-20232A?style=flat&logo=react&logoColor=61DAFB)](https://reactnative.dev)
+[![TypeScript](https://img.shields.io/badge/TypeScript-007ACC?style=flat&logo=typescript&logoColor=white)](https://www.typescriptlang.org)
+
+[![Twitter](https://img.shields.io/badge/Twitter-@media__sfu-1DA1F2?logo=twitter&logoColor=white)](https://twitter.com/media_sfu)
+[![Forum](https://img.shields.io/badge/Community-Forum-5865F2?logo=discourse&logoColor=white)](https://www.mediasfu.com/forums)
+[![GitHub](https://img.shields.io/badge/GitHub-MediaSFU-181717?logo=github&logoColor=white)](https://github.com/MediaSFU)
+[![Website](https://img.shields.io/badge/Website-mediasfu.com-0A66C2?logo=google-chrome&logoColor=white)](https://www.mediasfu.com/)
+[![YouTube](https://img.shields.io/badge/YouTube-Channel-FF0000?logo=youtube&logoColor=white)](https://www.youtube.com/channel/UCELghZRPKMgjih5qrmXLtqw)
+
+## MediaSFU ecosystem
+
+A unified real‑time stack for telephony and multimodal agents with production SDKs across mobile and web.
+
+- Telephony agents and apps/SDKs: VOIP reference suite → [github.com/MediaSFU/VOIP](https://github.com/MediaSFU/VOIP)
+- Multimodal (vision, audio, text) non‑telephony agents and apps/SDKs → [github.com/MediaSFU/Agents](https://github.com/MediaSFU/Agents)
+- Agents workspace (bring your own API keys) → [agents.mediasfu.com/playground](https://agents.mediasfu.com/playground)
+- Agents workspace (MediaSFU keys, limited) → [agentsmediasfu.com](https://agentsmediasfu.com)
+
+### SDKs at a glance
+
+- React Native Expo: npm [mediasfu-reactnative-expo](https://www.npmjs.com/package/mediasfu-reactnative-expo) • GitHub [MediaSFU-ReactNative-Expo](https://github.com/MediaSFU/MediaSFU-ReactNative-Expo)
+- React Native CLI: npm [mediasfu-reactnative](https://www.npmjs.com/package/mediasfu-reactnative) • GitHub [MediaSFU-ReactNative](https://github.com/MediaSFU/MediaSFU-ReactNative)
+- Flutter: pub.dev [mediasfu_sdk](https://pub.dev/packages/mediasfu_sdk) • GitHub [MediaSFU_SDK_Flutter](https://github.com/MediaSFU/MediaSFU_SDK_Flutter)
+- React.js: npm [mediasfu-reactjs](https://www.npmjs.com/package/mediasfu-reactjs) • GitHub [MediaSFU-ReactJS](https://github.com/MediaSFU/MediaSFU-ReactJS)
+- Angular: npm [mediasfu-angular](https://www.npmjs.com/package/mediasfu-angular) • GitHub [MediaSFU-Angular](https://github.com/MediaSFU/MediaSFU-Angular)
+
 
 MediaSFU offers a cutting-edge streaming experience that empowers users to customize their recordings and engage their audience with high-quality streams. Whether you're a content creator, educator, or business professional, MediaSFU provides the tools you need to elevate your streaming game.
 
@@ -160,12 +170,6 @@ Our Angular SDK is now available! Easily incorporate MediaSFU streaming features
 - **GitHub:** [MediaSFU/MediaSFU-Angular](https://github.com/MediaSFU/MediaSFU-Angular)
 - **npm:** [mediasfu-angular](https://www.npmjs.com/package/mediasfu-angular)
 
-### 🌸 [Vue SDK](https://www.npmjs.com/package/mediasfu-vue-sdk) *(Coming March 2025)*
-
-Scheduled for release in March 2025, our Vue SDK will allow developers to integrate MediaSFU streaming features into Vue.js applications, expanding our support for the vibrant Vue community.
-
-- **npm:** *(Coming March 2025)*
-
 ---
 
 ## 🛠️ MediaSFU Quick Start Apps
@@ -213,7 +217,6 @@ For detailed instructions on setting up and using our SDKs, refer to the respect
 - [Flutter SDK Documentation](https://github.com/MediaSFU/MediaSFU_SDK_Flutter)
 - [React JS SDK Documentation](https://github.com/MediaSFU/MediaSFU-ReactJS)
 - [Angular SDK Documentation](https://github.com/MediaSFU/MediaSFU-Angular)
-- [Vue SDK Documentation](https://github.com/MediaSFU/MediaSFU-Vue) *(Coming March 2025)*
 
 For a streamlined setup experience, explore our **Quickstart Monorepo**:
 
