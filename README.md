@@ -29,6 +29,7 @@ A unified real‑time stack for telephony and multimodal agents with production 
 - Flutter: pub.dev [mediasfu_sdk](https://pub.dev/packages/mediasfu_sdk) • GitHub [MediaSFU_SDK_Flutter](https://github.com/MediaSFU/MediaSFU_SDK_Flutter)
 - React.js: npm [mediasfu-reactjs](https://www.npmjs.com/package/mediasfu-reactjs) • GitHub [MediaSFU-ReactJS](https://github.com/MediaSFU/MediaSFU-ReactJS)
 - Angular: npm [mediasfu-angular](https://www.npmjs.com/package/mediasfu-angular) • GitHub [MediaSFU-Angular](https://github.com/MediaSFU/MediaSFU-Angular)
+- Vue.js: npm [mediasfu-vue](https://www.npmjs.com/package/mediasfu-vue) • [GitHub](https://github.com/MediaSFU/MediaSFU-Vue)
 
 
 MediaSFU offers a cutting-edge streaming experience that empowers users to customize their recordings and engage their audience with high-quality streams. Whether you're a content creator, educator, or business professional, MediaSFU provides the tools you need to elevate your streaming game.
